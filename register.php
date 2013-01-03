@@ -90,7 +90,7 @@ $db->query("INSERT INTO users (email, prefs) VALUES ('$email', $prefs);");
 $sid = $db->query("SELECT sid FROM users WHERE email = '$email'");
 $sid = $sid[0]['sid'];
 
-$checkmail_text = "Jemand (hoffentlich du selbst) möchte deine Mailadresse \"".$email."\" für den Piraten-Newsletter anmelden. \nWenn du damit einverstanden bist, klicke bitte auf den folgenden Link:\n".change_link($sid,"confirm"). "\n";
+$checkmail_text = "Jemand (hoffentlich du selbst) möchte deine Mailadresse \"".$email."\" für den Piraten-Newsletter anmelden. \nWenn du damit einverstanden bist, klicke bitte auf den folgenden Link:\n".change_link($sid,"confirm"). "\n\nWenn du diesen Newsletter nicht empfangen willst, brauchst du nichts zu unternehmen. Nur wenn du den obigen Bestätigungslink anklickst, wirst du den Newsletter bekommen.";
 mail_utf8($email, "[Piraten-Newsletter] Bestätigung deiner E-Mail-Adresse", $checkmail_text);
 
 $db->close();
