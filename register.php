@@ -65,7 +65,7 @@ $sid = mt_rand();
 
 $db->query("INSERT INTO users (email, prefs, sid) VALUES ('$email', $prefs, $sid);");
 
-$checkmail_text = "Bitte bestätige deine E-Mail-Adresse mit einem Klick auf den folgenden Link:\n".change_link($sid,"confirm"). "\n";
+$checkmail_text = "Jemand (hoffentlich du selbst) möchte deine Mailadresse \"".$email."\" für den Piraten-Newsletter anmelden. \nWenn du damit einverstanden bist, klicke bitte auf den folgenden Link:\n".change_link($sid,"confirm"). "\n\nWenn du diesen Newsletter nicht empfangen willst, brauchst du nichts zu unternehmen. Nur wenn du den obigen Bestätigungslink anklickst, wirst du den Newsletter bekommen.";
 mail_utf8($email, "[Piraten-Newsletter] Bestätigung deiner E-Mail-Adresse", $checkmail_text);
 
 $db->close();
@@ -161,6 +161,7 @@ if($error != "") {
               <input type="hidden" name="submit" value="true" />
 	      <button type="submit" class="btn">Absenden</button>
 	    </form>
+			<p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
 	  </div>
         </div><!--/span-->
       </div><!--/row-->

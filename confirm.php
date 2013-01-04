@@ -33,7 +33,7 @@ $email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1");
 $email = $email[0]['email'];
 
 $checkmail_text = "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Ab sofort erhältst du regelmäßig deinen personalisierten Newsletter!\n\n";
-$checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verändern oder den Newsletter abbestellen:\n".change_link($sid);
+$checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters ansehen und verändern oder den Newsletter abbestellen:\n".change_link($sid);
 mail_utf8($email, "[Piraten-Newsletter] E-Mail-Adresse bestätigt", $checkmail_text);
 
 $db->close();
@@ -87,7 +87,7 @@ end:
 	    <h1>Du bist erfolgreich angemeldet!</h1>
 	    <p>Ab sofort erhältst du regelmäßig unseren personalisierten Newsletter. Viel Spa&szlig;!</p>
 	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verändern oder den Newsletter abbestellen:<br><a href="<?echo change_link($sid);?>"><?echo change_link($sid);?></a>
-	    <p></p>
+	    <p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
 	  </div>
 	  <div id="error_view" class="well">
 	    <h1>Ein Fehler ist aufgetreten!</h1>
