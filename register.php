@@ -1,46 +1,9 @@
-<!--
-Es fehlen noch
-*Captcha - brauchen wir das?
-*Bestätigungsemail
-
-newsletter=> \d content
-                                             Table "public.content"
-          Column           |            Type             |                      Modifiers                       
----------------------------+-----------------------------+------------------------------------------------------
- id                        | integer                     | not null default nextval('content_id_seq'::regclass)
- pref_id                   | integer                     | 
- content                   | text                        | 
- earliest_date_for_sending | timestamp without time zone | 
- latest_date_for_sending   | timestamp without time zone | 
- sent                      | boolean                     | 
- first_eyes_usr_id         | integer                     | 
- second_eyes_usr_id        | integer                     | 
- third_eyes_usr_id         | integer                     | 
-
-newsletter=> \d users
-                         Table "public.users"
- Column |  Type   |                     Modifiers                      
---------+---------+----------------------------------------------------
- id     | integer | not null default nextval('users_id_seq'::regclass)
- email  | text    | 
- prefs  | integer |
- confirmed | boolean | default false	 
- confirm_int | integer | default 0
-
-newsletter=> \d admins
-    Table "public.admins"
- Column |  Type   | Modifiers 
---------+---------+------------
- usr_id | integer | 
- rights | integer | 
--->
-
 <?
 require("db.php");
 require("mail.php");
 require("config.php");
 
-$display = "#welcome_view {display:none;}";
+$display = "#welcome_view {display:none;}\n#dse_view {display:none;}";
 
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 $bund = isset($_POST['bund']) ? $_POST['bund'] : '';
@@ -53,6 +16,12 @@ $stmk = isset($_POST['stmk']) ? $_POST['stmk'] : '';
 $vlbg = isset($_POST['vlbg']) ? $_POST['vlbg'] : '';
 $w = isset($_POST['w']) ? $_POST['w'] : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
+
+if (isset($_GET['dse']))
+{
+  $display = "#form_view {display:none;}\n#welcome_view {display:none;}";
+  goto end;
+}
 
 if($submit != "true"){
   goto end;
@@ -88,18 +57,20 @@ if (count($id) > 0)
   goto end;
 }
 
-$db->query("INSERT INTO users (email, prefs) VALUES ('$email', $prefs);");
+do
+{
+$sid = mt_rand();
+} while (count($db->query("SELECT * FROM users WHERE sid = $sid")) > 0);
+  
 
-$sid = $db->query("SELECT sid FROM users WHERE email = '$email'");
-$sid = $sid[0]['sid'];
+$db->query("INSERT INTO users (email, prefs, sid) VALUES ('$email', $prefs, $sid);");
 
 $checkmail_text = "Bitte bestätige deine E-Mail-Adresse mit einem Klick auf den folgenden Link:\n".change_link($sid,"confirm"). "\n";
 mail_utf8($email, "[Piraten-Newsletter] Bestätigung deiner E-Mail-Adresse", $checkmail_text);
 
 $db->close();
 
-$display = "#form_view {display:none;}";
-
+$display = "#form_view {display:none;}\n#dse_view {display:none;}";
 end:
 ?>
 
@@ -146,6 +117,15 @@ end:
     <div class="container">
       <div class="row">
         <div class="span8">
+          <div id="dse_view" class="well">
+            <h1>Datenschutzrichtlinien</h1>
+            <p>
+Nach Anmeldung wird die E-Mail-Adresse des Beziehers von der Piratenpartei &Ouml;sterreichs als Auftraggeber verarbeitet (gespeichert und f&uuml;r Zwecke der Versendung ben&uuml;tzt). Es werden keinerlei Daten zum &Uuml;bermittlungsvorgang (Zustell- oder Lesebest&auml;tigungen) ermittelt. Nach Abmeldung vom Bezug werden die Daten aus dieser Datenanwendung gel&ouml;scht. Eine &Uuml;bermittlung dieser Daten ist nicht vorgesehen. Die Datenanwendung f&uuml;r Zwecke dieses Newsletters (einschlie&szlig;lich der zur Verbreitung ben&uuml;tzten Mailserver) wird auf EDV-Anlagen der Piratenpartei &Ouml;sterreichs gehostet.
+            </p>
+            <p>
+              <a href="register.php">Zur&uuml;ck</a>
+            </p>
+          </div>
 	  <div id="welcome_view" class="well">
 	    <h1>Danke für deine Anmeldung!</h1>
 	    <p>An die von dir eingebene E-Mail-Adresse wird in Kürze eine Bestätigungsmail versendet.</p>
@@ -158,7 +138,7 @@ if($error != "") {
 }
 ?>
 	    <p>Hier kannst du dich zum Newsletter der Piratenpartei Österreichs schnell und einfach anmelden.<br>
-	    Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="#">toter Link</a></p>
+	    Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="register.php?dse=1">Datenschutzrichtlinien</a></p>
 	    <form action="register.php" method="post">
 		<h4>Bitte trage hier deine E-Mail-Adresse ein:<?echo $validemail;?></h4>
 		<div class="input-prepend">

@@ -47,16 +47,19 @@ if ($rights == 0)
   header("$header_location");
 }
 
-$articles = $db->query("SELECT * FROM content WHERE NOT sent ORDER BY pref_id");
+$articles = $db->query("SELECT * FROM content WHERE pref_id != 512 ORDER BY pref_id");
 
 foreach ($articles as $article) {
   if($article['pref_id'] == 1) {
-    if(isset($article['third_eyes_usr_id'])) {
-      $main_text = explode("%%LO CONTENT%%", $article['content']);
-    }
+    $main_text = explode("%%LO CONTENT%%", $article['content']);
   } else {
     if(isset($article['second_eyes_usr_id'])) {
-      $lo_text[] = $article['content'];
+      $lo = decodePrefs($article['pref_id']);
+      $pre = "--------------- Information der LO " . $lo[0] . " ";
+      $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
+      $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
+      if (strlen($article['content']) > 10)
+        $lo_text[] = $pre . $article['content'] . $post;
     }
   }
 }
@@ -64,15 +67,19 @@ foreach ($articles as $article) {
 $preview_text_lo = implode('<br><br>', $lo_text);
 $preview_text = $main_text[0].'<br><br>'.$preview_text_lo.'<br><br>'.$main_text[1];
 
-$sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id NOTNULL AND second_eyes_usr_id NOTNULL AND third_eyes_usr_id NOTNULL AND pref_id = 1;");
-$sendsubject = $db->query("SELECT * FROM content WHERE first_eyes_usr_id NOTNULL AND second_eyes_usr_id NOTNULL AND third_eyes_usr_id NOTNULL AND pref_id = 512;");
+$sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND third_eyes_usr_id IS NOT NULL AND pref_id = 1;");
+$sendsubject = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND third_eyes_usr_id IS NOT NULL AND pref_id = 512;");
+$sendlos = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id != 1 AND pref_id != 512;");
+if (count($sendbo) == 1)
+  $mailtext = $sendbo[0]['content'];
+$subject_r = $db->query("SELECT * FROM content WHERE pref_id = 512;");
+if (count($subject_r) == 1)
+  $subject = $subject_r[0]['content'];
+else
+  $subject = '';
+$users = $db->query("SELECT * FROM users WHERE confirmed");
 if (count($sendbo) == 1 && count($sendsubject) == 1)
 {
-    $sendlos = $db->query("SELECT * FROM content WHERE first_eyes_usr_id NOTNULL AND second_eyes_usr_id NOTNULL AND pref_id != 1;");
-    $mailtext = $sendbo[0]['content'];
-    $subject = $db->query("SELECT content FROM content WHERE first_eyes_usr_id NOTNULL AND second_eyes_usr_id NOTNULL AND third_eyes_usr_id NOTNULL AND pref_id = 512;");
-    $subject = $subject[0]['content'];
-    $users = $db->query("SELECT * FROM users WHERE confirmed");
     $may_send_mails = true;
 }
 
@@ -146,8 +153,12 @@ foreach ($users as $user)
         $lo_mailtext = '';
         foreach ($sendlos as $sendlo)
         {
-                if (intval($sendlo['pref_id']) & intval($user['prefs']))
-                        $lo_mailtext .= $sendlo['content'] . "\n";
+	      $lo = decodePrefs($sendlo['pref_id']);
+	      $pre = "--------------- Information der LO " . $lo[0] . " "; 
+	      $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
+	      $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
+	      if (strlen($article['content']) > 10 && intval($sendlo['pref_id']) & intval($user['prefs']))
+                        $lo_mailtext .= $pre . $sendlo['content'] . $post;
         }
 
         $user_mailtext = str_replace('%%LO CONTENT%%',$lo_mailtext,$mailtext);
@@ -167,7 +178,9 @@ echo '
         </div><!--/span-->
 ';
 $db = new db($dbLang, $dbName);
-$db->query("UPDATE content SET content = NULL, first_eyes_usr_id = NULL, second_eyes_usr_id = NULL, third_eyes_usr_id = NULL;");
+$db->query("UPDATE content SET content = NULL, first_eyes_usr_id = NULL, second_eyes_usr_id = NULL, third_eyes_usr_id = NULL WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND third_eyes_usr_id IS NOT NULL AND pref_id = 1;");
+$db->query("UPDATE content SET content = NULL, first_eyes_usr_id = NULL, second_eyes_usr_id = NULL, third_eyes_usr_id = NULL WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND third_eyes_usr_id IS NOT NULL AND pref_id = 512;");
+$db->query("UPDATE content SET content = NULL, first_eyes_usr_id = NULL, second_eyes_usr_id = NULL, third_eyes_usr_id = NULL WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id != 1;");
 $db->close();
 }?>
 	<div class="span8">
@@ -188,6 +201,25 @@ echo '
 	</div>
         <div class="span4">
 <?
+if (512 & $rights)
+{
+$article = $subject_r[0];
+$admins = "";
+$prefs = decodePrefs($article['pref_id']);
+$send = true;
+if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
+if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];} else {$send = false;}
+if ($article['pref_id'] == 1)
+  if (isset($article['third_eyes_usr_id'])) {$admins[] = $article['third_eyes_usr_id'];} else {$send = false;}
+$admins = getAdminNames($admins);
+if ($send) {$send_color = "alert-success";} else {$send_color = "alert-danger";}
+echo '
+            <div class="alert '.$send_color.'">
+              <p>Betreff</br>
+              Versandfreigabe erfolgt durch: '.implode(", ", $admins).'</p>
+            </div>
+';
+}
 foreach ($articles as $article)
 {
 if ($article['pref_id'] == 512) {continue;}
@@ -200,6 +232,7 @@ if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_
 if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];} else {$send = false;}
 if ($article['pref_id'] == 1)
   if (isset($article['third_eyes_usr_id'])) {$admins[] = $article['third_eyes_usr_id'];} else {$send = false;}
+$admins = getAdminNames($admins);
 if ($send) {$send_color = "alert-success";} else {$send_color = "alert-danger";}
 echo '
             <div class="alert '.$send_color.'">

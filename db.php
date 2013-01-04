@@ -1,14 +1,17 @@
 <?php
+require("../adm_program/libs/phpass/passwordhash.php");
 class db {
 private $dbConn_ = null;
-private $dbType_ = null;
-public function __construct($dbType, $name, $host = null, $user = null, $pass = null)
+public $dbType_ = null;
+public function __construct($dbType, $name, $host = null)
 {
   $this->dbType_ = $dbType;
   switch ($this->dbType_)
   {
     case 'mysql':
-      $this->dbConn_ = mysql_connect($host, $user, $pass);
+      global $dbUser;
+      global $dbPass;
+      $this->dbConn_ = mysql_connect($host, $dbUser, $dbPass);
       if (!$this->dbConn_)
       {
         die('Could not connect: ' . mysql_error());
@@ -79,13 +82,19 @@ public function escape($text)
 
 function login($db, $user, $pass)
 {
-  $success = true;
-  $usr_id = 0;
-  if ($success)
+  $user = $db->escape($user);
+  $data = $db->query("SELECT usr_id,usr_password FROM ppoe_mitglieder.adm_users WHERE usr_login_name = '$user'");
+  if (count($data) == 1)
   {
-    $rand = mt_rand();
-    $db->query("UPDATE admins SET cookie = $rand, login = now() WHERE usr_id = $usr_id");
-    setcookie("pp_newsletter_login", $rand, time()+86400);
+    $passwordHasher = new PasswordHash(9, true);
+    $success = $passwordHasher->CheckPassword($pass, $data[0]['usr_password']);
+    $usr_id = $data[0]['usr_id'];
+    if ($success)
+    {
+      $rand = mt_rand();
+      $db->query("UPDATE admins SET cookie = $rand, login = now() WHERE usr_id = $usr_id") ? 'true' : 'false';
+      setcookie("pp_newsletter_login", $rand, time()+86400);
+    }
   }
 }
 
@@ -93,7 +102,7 @@ function checklogin($db)
 {
   if (isset($_COOKIE["pp_newsletter_login"]) && preg_match('/^-?\d+$/', $_COOKIE["pp_newsletter_login"]) == 1)
   {
-    $admins = $db->query("SELECT * FROM admins WHERE cookie = {$_COOKIE["pp_newsletter_login"]} AND login > now() - '24 hours'::interval");
+    $admins = $db->query("SELECT * FROM admins WHERE cookie = {$_COOKIE["pp_newsletter_login"]} AND login > now() - " . ($db->dbType_ == 'mysql' ? "INTERVAL 24 HOUR" : "'24 hours'::interval"));
     if (count($admins) == 1)
     {
       return intval($admins[0]['rights']);
@@ -106,7 +115,7 @@ function checklogin_id($db)
 {
   if (isset($_COOKIE["pp_newsletter_login"]) && preg_match('/^-?\d+$/', $_COOKIE["pp_newsletter_login"]) == 1)
   {
-    $admins = $db->query("SELECT * FROM admins WHERE cookie = {$_COOKIE["pp_newsletter_login"]} AND login > now() - '24 hours'::interval");
+    $admins = $db->query("SELECT * FROM admins WHERE cookie = {$_COOKIE["pp_newsletter_login"]} AND login > now() - " . ($db->dbType_ == 'mysql' ? "INTERVAL 24 HOUR" : "'24 hours'::interval"));
     if (count($admins) == 1)
     {
       return intval($admins[0]['usr_id']);
@@ -137,6 +146,24 @@ function decodePrefs($prefs)
   if ($prefs & 256)
     $pa[] = "Wien";
   return $pa;
+}
+
+function getAdminNames($admins)
+{
+  global $dbLang, $dbName;
+  $db = new db($dbLang, $dbName);
+  foreach ($admins as $admin)
+  {
+    if (preg_match('/^\d+$/', $admin) != 1)
+      continue;
+    $result = $db->query("SELECT usd_value FROM ppoe_mitglieder.adm_user_data WHERE usd_usf_id = 37 AND usd_usr_id = $admin");
+    if (count($result) != 1)
+      $admin_names[] = $admin;
+    else
+      $admin_names[] = $result[0]['usd_value'];
+  }
+  $db->close();
+  return $admin_names;
 }
 
 

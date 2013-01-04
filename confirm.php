@@ -21,7 +21,7 @@ $sid = $q_array[0];
 $db = new db($dbLang, $dbName);
 
 $confirmed = $db->query("SELECT confirmed FROM users WHERE sid = '$sid' LIMIT 1");
-if ($confirmed[0]['confirmed'] != "f")
+if ($confirmed[0]['confirmed'] != 0 && $confirmed[0]['confirmed'] != 'f')
 {
   $error = "Diese E-Mail-Adresse wurde bereits bestätigt!";
   goto end;

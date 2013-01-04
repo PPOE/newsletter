@@ -77,7 +77,7 @@ $db->close();
 <?
 foreach ($users as $user)
 {
-  echo '<tr><td><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></td><td>' . implode(', ', decodePrefs($user['prefs'])) . '</td><td>' . ($user['confirmed'] == 't' ? 'Ja' : 'Nein') . '</td><td><form action="list.php" method="POST"><input type="hidden" name="email" value="' . $user['email'] . '" /><input type="submit" name="delete" value="Abmelden" class="btn btn-danger"/></form></td></tr>';
+  echo '<tr><td><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></td><td>' . implode(', ', decodePrefs($user['prefs'])) . '</td><td>' . ($user['confirmed'] != 'f' && $user['confirmed'] != 0 ? 'Ja' : 'Nein') . '</td><td><form action="list.php" method="POST"><input type="hidden" name="email" value="' . $user['email'] . '" /><input type="submit" name="delete" value="Abmelden" class="btn btn-danger"/></form></td></tr>';
 }
 ?>
               </table>

@@ -19,7 +19,7 @@ require("db.php");
 require("config.php");
 require("mail.php");
 
-$db = new db("pgsql", "newsletter");
+$db = new db($dbLang,$dbName);
 
 if(isset($_GET['s']) && preg_match('/^-?\d+$/', $_GET['s']) == 1 && isset($_GET['q'])) {
   $s = intval($_GET['s']);
