@@ -20,7 +20,6 @@ if (isset($_POST['save']))
 }
 if (isset($_POST['publish']))
 {
-	$save = true;
 	$publish = true;
 }
 if ($save)
@@ -31,8 +30,6 @@ if ($save)
           $publish = false;
         }
         $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL, third_eyes_usr_id = NULL WHERE pref_id = $pref_id");
-        if (!($pref_id & $rights))
-          header("$header_location");
 	$db->query("UPDATE content SET content = '$content' WHERE pref_id = $pref_id");
 }
 if ($publish)

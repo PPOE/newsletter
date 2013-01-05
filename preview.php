@@ -163,7 +163,7 @@ foreach ($users as $user)
 
         $user_mailtext = str_replace('%%LO CONTENT%%',$lo_mailtext,$mailtext);
 
-        mail_utf8($user['email'], "[Piraten-Newsletter] $subject", $user_mailtext, change_link($user['sid']));
+        mail_utf8($user['email'], "$subject", $user_mailtext, change_link($user['sid']));
 
         $i++;
         if ($i % ($user_count / $nth) == 0) {
@@ -195,7 +195,7 @@ echo '
 ';
 ?>
 	      <a class="btn" href="create.php">Newsletter bearbeiten</a></form></p>
-	    <p>Betreff: [Piraten-Newsletter] <?echo $subject;?></p>
+	    <p>Betreff: <?echo $subject;?></p>
 	    <p><?echo "<pre>".$preview_text."</pre>";?></p>
 	  </div>
 	</div>
