@@ -167,9 +167,10 @@ echo '                  <label class="checkbox"><input type="checkbox" name="w" 
               <button type="submit" class="btn">Absenden</button>
             </form>
 	    <?echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
+              <h4>Willst du den Newsletter abbestellen?</h4>
 	      <input type="hidden" name="submit" value="true" />
 	      <input type="hidden" name="delete" value="true" />
-	      <button type="submit" class="btn btn-danger">Anmeldung löschen</button>
+	      <button type="submit" class="btn btn-danger">Newsletter abbestellen</button>
 	    </form>
 	  </div>
         </div><!--/span-->
