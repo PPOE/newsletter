@@ -92,8 +92,9 @@ function login($db, $user, $pass)
     if ($success)
     {
       $rand = mt_rand();
-      $db->query("UPDATE admins SET cookie = $rand, login = now() WHERE usr_id = $usr_id") ? 'true' : 'false';
+      $db->query("UPDATE admins SET cookie = $rand, login = now() WHERE usr_id = $usr_id");
       setcookie("pp_newsletter_login", $rand, time()+86400);
+      header("Location: https://mitglieder.piratenpartei.at/newsletter/login.php");
     }
   }
 }

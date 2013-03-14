@@ -5,8 +5,8 @@ require("config.php");
 $db = new db($dbLang, $dbName);
 
 $header_location = "Location: " . $baseUrl . "login.php";
-
-if (!(checklogin($db) & 1))
+$rights = checklogin($db);
+if (!($rights > 0))
 {
 header("$header_location");
 }
@@ -16,10 +16,11 @@ if(isset($_POST['delete'])) {
     $error = "Ein Fehler beim Löschen ist aufgetreten!";
     goto end;
   }
-  $db->query("DELETE FROM users WHERE email = '{$_POST['email']}'");
+  $db->query("DELETE FROM users WHERE email = '{$_POST['email']}' AND prefs & $rights");
 }
-
-$users = $db->query("SELECT * FROM users;");
+if ($rights & 1)
+  $rights = 1;
+$users = $db->query("SELECT * FROM users WHERE prefs & $rights;");
 
 end:
 $db->close();

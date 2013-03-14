@@ -85,7 +85,7 @@ if($error != "") {
 		</div>
                 <div class="input-prepend">
                   <span class="add-on">Passwort:</span>
-                  <input id="inputPass" type="password" name="pass" placeholder="Admidio Login Passwort" value="<? echo $pass; ?>">
+                  <input id="inputPass" type="password" name="pass" placeholder="Admidio Login Passwort">
                 </div>
               <input type="hidden" name="submit" value="true" />
 	      <button type="submit" class="btn">Login</button>

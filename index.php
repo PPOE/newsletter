@@ -1,0 +1,3 @@
+<?
+header("Location: register.php");
+?>

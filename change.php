@@ -55,7 +55,7 @@ if($ooe == "ooe") {$prefs += 16;}
 if($sbg == "sbg") {$prefs += 32;}
 if($stmk == "stmk") {$prefs += 64;}
 if($vlbg == "vlbg") {$prefs += 128;}
-if($w == "w") {$prefs += 512;}
+if($w == "w") {$prefs += 256;}
 
 $id = $db->query("SELECT id FROM users WHERE sid = '$sid' LIMIT 1;");
 $email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1;");

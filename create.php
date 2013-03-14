@@ -9,14 +9,14 @@ $rights = checklogin($db);
 $usr_id = checklogin_id($db);
 $pref_id = intval($_POST['pref_id']);
 $header_location = "Location: " . $baseUrl . "login.php";
-if ($rights == 0 || ($pref_id != 0 && !($pref_id & $rights)))
+if ($rights != 1 && ($rights == 0 || ($pref_id != 0 && !($pref_id & $rights || -($pref_id) & $rights))))
 {
   header("$header_location");
 }
 if (isset($_POST['save']))
 {
 	$save = true;
-	$db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL, third_eyes_usr_id = NULL WHERE pref_id = $pref_id");
+	$db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
 }
 if (isset($_POST['publish']))
 {
@@ -29,22 +29,20 @@ if ($save)
         {
           $publish = false;
         }
-        $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL, third_eyes_usr_id = NULL WHERE pref_id = $pref_id");
+        $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
 	$db->query("UPDATE content SET content = '$content' WHERE pref_id = $pref_id");
 }
 if ($publish)
 {
-	$eyes_usr_id = $db->query("SELECT first_eyes_usr_id, second_eyes_usr_id, third_eyes_usr_id FROM content WHERE pref_id = $pref_id");
+	$eyes_usr_id = $db->query("SELECT first_eyes_usr_id, second_eyes_usr_id FROM content WHERE pref_id = $pref_id");
 	if ((preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) == 1 && $eyes_usr_id[0]['first_eyes_usr_id'] == $usr_id) ||
-            (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) == 1 && $eyes_usr_id[0]['second_eyes_usr_id'] == $usr_id) ||
-            (preg_match('/^\d+$/', $eyes_usr_id[0]['third_eyes_usr_id']) == 1 && $eyes_usr_id[0]['third_eyes_usr_id'] == $usr_id)) {}
+            (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) == 1 && $eyes_usr_id[0]['second_eyes_usr_id'] == $usr_id)) {}
 	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) != 1) {$db->query("UPDATE content SET first_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
 	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) != 1) {$db->query("UPDATE content SET second_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
-	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['third_eyes_usr_id']) != 1) {$db->query("UPDATE content SET third_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
         else { }
 
-	$sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND third_eyes_usr_id IS NOT NULL AND pref_id = 1;");
-        $sendsubject = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND third_eyes_usr_id IS NOT NULL AND pref_id = 512;");
+	$sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = 1;");
+        $sendsubject = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = -1;");
 	if (count($sendbo) == 1 && count($sendsubject) == 1)
 	{
 		$sendmails = true;
@@ -102,23 +100,24 @@ end:
 <?
 foreach ($articles as $article)
 {
-if (!(intval($article['pref_id']) & $rights))
+$pid = intval($article['pref_id']);
+if ($pid > 0)
   continue;
-if($article['pref_id'] != 512) {continue;}
+if ($pid < 0 && !(-$pid & $rights))
+  continue;
 if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
 if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];}
-if (isset($article['third_eyes_usr_id'])) {$admins[] = $article['third_eyes_usr_id'];}
 $admins = getAdminNames($admins);
 echo '
         <div class="span12">
           <div class="well">
             <h3>Betreff bearbeiten</h3>
             <div><form action="create.php" method="POST">
-              <input type="hidden" name="pref_id" value="512" />
-              <textarea style="width:60%;" rows="1" name="content" onclick="document.getElementById(\'publish512\').style.display=\'none\';">'.$article['content'].'</textarea><br />
+              <input type="hidden" name="pref_id" value="'.$article['pref_id'].'" />
+              <textarea style="width:60%;" rows="1" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.$article['content'].'</textarea><br />
               <input type="submit" class="btn" name="save" value="Speichern (ohne Versandfreigabe)" />
-              <input type="submit" class="btn" id="publish512" name="publish" value="Versandfreigabe (ohne Speichern)" />
-              <p>Versandfreigabe erfolgt durch (3 Personen): '.implode(", ", $admins).'</p>
+              <input type="submit" class="btn" id="publish'.$article['pref_id'].'" name="publish" value="Versandfreigabe (ohne Speichern)" />
+              <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
             </form></div>
           </div>
         </div><!--/span-->
@@ -126,24 +125,23 @@ echo '
 }
 foreach ($articles as $article)
 {
-if (!(intval($article['pref_id']) & $rights))
+$pid = intval($article['pref_id']);
+if ($pid > 0 && !($pid & $rights) && $rights != 1)
+  continue;
+if ($pid < 0)
   continue;
 $admins = "";
 $prefs = decodePrefs($article['pref_id']);
 if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
 if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];}
-if ($article['pref_id'] == 1)
-  if (isset($article['third_eyes_usr_id'])) {$admins[] = $article['third_eyes_usr_id'];}
-  $send_btn = "";
+$send_btn = "";
 $admins = getAdminNames($admins);
 $area_note = "";
+$send_btn = "<p><a href='preview.php' class='btn btn-success'>Vorschau</a></p>";
 if ($article['pref_id'] == 1)
 {
-  $send_btn = "<p><a href='preview.php' class='btn btn-success'>Vorschau</a></p>";
   $area_note = "<br />Beachte dass der Text die Zeichenfolge <code>%%LO CONTENT%%</code> enthalten muss. An dieser Stelle wird der LO-spezifische Inhalt eingefügt.";
 }
-if ($article['pref_id'] == 512)
-  continue;
 echo '
         <div class="span12">
           <div class="well">
@@ -156,7 +154,7 @@ echo '
               <textarea style="width:60%;" rows="5" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.$article['content'].'</textarea><br />
               <input type="submit" class="btn" name="save" value="Speichern (ohne Versandfreigabe)" />
               <input type="submit" class="btn" id="publish'.$article['pref_id'].'" name="publish" value="Versandfreigabe (ohne Speichern)" />
-              <p>Versandfreigabe erfolgt durch ('. ($article['pref_id'] == 1 ? '3' : '2') .' Personen): '.implode(", ", $admins).'</p>
+              <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
             </form></div>
 	  </div>
         </div><!--/span-->
