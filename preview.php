@@ -1,36 +1,3 @@
-<!--
-newsletter=> \d content
-                                             Table "public.content"
-          Column           |            Type             |                      Modifiers                       
----------------------------+-----------------------------+------------------------------------------------------
- id                        | integer                     | not null default nextval('content_id_seq'::regclass)
- pref_id                   | integer                     | 
- content                   | text                        | 
- earliest_date_for_sending | timestamp without time zone | 
- latest_date_for_sending   | timestamp without time zone | 
- sent                      | boolean                     | 
- first_eyes_usr_id         | integer                     | 
- second_eyes_usr_id        | integer                     | 
- third_eyes_usr_id         | integer                     | 
-
-newsletter=> \d users
-                         Table "public.users"
- Column |  Type   |                     Modifiers                      
---------+---------+----------------------------------------------------
- id     | integer | not null default nextval('users_id_seq'::regclass)
- email  | text    | 
- prefs  | integer |
- confirmed | boolean | default false	 
- confirm_int | integer | default 0
-
-newsletter=> \d admins
-    Table "public.admins"
- Column |  Type   | Modifiers 
---------+---------+------------
- usr_id | integer | 
- rights | integer | 
--->
-
 <?
 require("config.php");
 require("db.php");
@@ -72,9 +39,17 @@ foreach ($articles as $article) {
 $preview_text_lo = implode('<br><br>', $lo_text);
 $preview_text = $main_text[0].'<br><br>'.$preview_text_lo.'<br><br>'.$main_text[1];
 
-$sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = $rights;");
-$sendsubject = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = -$rights;");
-$sendlos = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id != 1 AND pref_id > 0;");
+$testmail = false;
+$eyes = " first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL ";
+if (isset($_POST['test']) && isset($_POST['testmail']))
+{
+  $testmail = true;
+  $eyes = " 1 ";
+}
+
+$sendbo = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id = $rights;");
+$sendsubject = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id = -$rights;");
+$sendlos = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id != 1 AND pref_id > 0;");
 if (count($sendbo) == 1)
   $mailtext = $sendbo[0]['content'];
 $subject_r = $db->query("SELECT * FROM content WHERE pref_id = -$rights;");
@@ -88,7 +63,13 @@ if (count($sendbo) == 1 && count($sendsubject) == 1)
     $may_send_mails = true;
 }
 
-if (isset($_POST['sendmails']) && $may_send_mails) {
+if ($testmail)
+{
+  $mailaddr = $db->escape($_POST['testmail']);
+  $users = $db->query("SELECT * FROM users WHERE confirmed AND prefs & $rights AND email = '$mailaddr' LIMIT 1");
+}
+
+if ($testmail || (isset($_POST['sendmails']) && $may_send_mails)) {
   if (!($rights > 0))
   {
     header("$header_location");
@@ -152,16 +133,25 @@ if ($sendmails)
             <h3 id="please_wait">Bitte warten...</h3>
               <p>
 ';
+if (!$testmail)
+{
 $db = new db($dbLang, $dbName);
 if ($rights == 1)
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");
 else
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
 $db->close();
+}
 $user_count = count($users);
 $nth = 10;
 foreach ($users as $user)
 {
+    if ($rights != 1)
+    {
+        $user_mailtext = $sendbo[0]['content'];
+    }
+    else
+    {
         $lo_mailtext = '';
         foreach ($sendlos as $sendlo)
         {
@@ -174,9 +164,15 @@ foreach ($users as $user)
         }
 
         $user_mailtext = str_replace('%%LO CONTENT%%',$lo_mailtext,$mailtext);
+    }
 
-        //mail_utf8($user['email'], "$subject", $user_mailtext, change_link($user['sid']));
-
+        mail_utf8($user['email'], "$subject", $user_mailtext, change_link($user['sid']));
+	
+	if ($testmail)
+	{
+		echo '<p>Versand an ' . $user['email'] . " erfolgt.</p>\n";
+	}
+	
         $i++;
         if ($i % ($user_count / $nth) == 0) {
           echo $i . " / " . $user_count . "<br />";
@@ -184,17 +180,25 @@ foreach ($users as $user)
 }
 echo '
               </p>
+';
+if ($i > 0)
+  echo '
             <h3>Versand abgeschlossen.</h3>
+';
+echo '
             <script type="text/javascript">document.getElementById("please_wait").style.display="none";</script>
           </div>
         </div><!--/span-->
 ';
+if (!$testmail)
+{
 $db = new db($dbLang, $dbName);
 if ($rights == 1)
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");
 else
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
 $db->close();
+}
 }?>
 	<div class="span8">
 	  <div class="well">
@@ -207,7 +211,10 @@ echo '
 	      <input type="submit" class="btn btn-success" value="Newsletter aussenden" />
 ';
 ?>
-	      <a class="btn" href="create.php">Newsletter bearbeiten</a></form></p>
+	      <a class="btn" href="create.php">Newsletter bearbeiten</a>
+              <textarea style="width:180px;" rows="1" name="testmail"></textarea>
+              <input type="submit" class="btn btn-success" name="test" value="Test an diese Mailadresse aussenden" />
+              </form></p>
 	    <p>Betreff: <?echo $subject;?></p>
 	    <p><?echo "<pre>".$preview_text."</pre>";?></p>
 	  </div>
