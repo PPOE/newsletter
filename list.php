@@ -88,7 +88,7 @@ foreach ($users as $user)
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
       </footer>
 
     </div><!--/.fluid-container-->

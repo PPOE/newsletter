@@ -34,7 +34,7 @@ $email = $email[0]['email'];
 
 $checkmail_text = "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Ab sofort erhältst du regelmäßig deinen personalisierten Newsletter!\n\n";
 $checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters ansehen und verändern oder den Newsletter abbestellen:\n".change_link($sid);
-mail_utf8($email, "[Piraten-Newsletter] E-Mail-Adresse bestätigt", $checkmail_text);
+mail_utf8($db,$confirm, $email, "[Piraten-Newsletter] E-Mail-Adresse bestätigt", $checkmail_text, from_header(1));
 
 $db->close();
 $display = "#error_view {display:none;}";
@@ -102,7 +102,7 @@ if($error != "") {
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
       </footer>
 
     </div><!--/.fluid-container-->

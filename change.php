@@ -70,12 +70,12 @@ if (count($id[0]['id']) == '')
 if ($delete == "true") {
   $db->query("DELETE FROM users WHERE sid = $sid;");
   $display = "#confirm_view {display:none;}\n#change_view {display:none;}";
-  mail_utf8($email, "[Piraten-Newsletter] Newsletter abbestellt", "Ab sofort erhältst du keinen Newsletter mehr. Außerdem wurden deine Daten aus unserer Datenbank unwiderbringlich gelöscht.");
+  mail_utf8($db,$email, "[Piraten-Newsletter] Newsletter abbestellt", "Ab sofort erhältst du keinen Newsletter mehr. Außerdem wurden deine Daten aus unserer Datenbank unwiderbringlich gelöscht.", from_header(1));
   goto end;
 }
 
 $db->query("UPDATE users SET prefs = $prefs WHERE sid = $sid;");
-mail_utf8($email, "[Piraten-Newsletter] Einstellung geändert", "Deine Newslettereinstellungen wurden geändert. Mit einem Klick auf den folgenden Klick können die Einstellungen noch einmal geändert werden:\n".change_link($sid));
+mail_utf8($db,$email, "[Piraten-Newsletter] Einstellung geändert", "Deine Newslettereinstellungen wurden geändert. Mit einem Klick auf den folgenden Klick können die Einstellungen noch einmal geändert werden:\n".change_link($sid),from_header(1));
 
 $prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
 $prefs = $prefs[0]['prefs'];
@@ -177,7 +177,7 @@ echo '                  <label class="checkbox"><input type="checkbox" name="w" 
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
       </footer>
 
     </div><!--/.fluid-container-->

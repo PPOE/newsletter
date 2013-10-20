@@ -25,7 +25,7 @@ foreach ($articles as $article) {
     $main_text = array($article['content'],"");
   }
   else {
-    if(isset($article['second_eyes_usr_id'])) {
+    if(isset($article['second_eyes_usr_id']) && $article['pref_id'] > 0) {
       $lo = decodePrefs($article['pref_id']);
       $pre = "--------------- Information der LO " . $lo[0] . " ";
       $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
@@ -133,22 +133,23 @@ if ($sendmails)
             <h3 id="please_wait">Bitte warten...</h3>
               <p>
 ';
+$db = new db($dbLang, $dbName);
 if (!$testmail)
 {
-$db = new db($dbLang, $dbName);
 if ($rights == 1)
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");
 else
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
-$db->close();
 }
 $user_count = count($users);
 $nth = 10;
+$lo_real_id = 1;
 foreach ($users as $user)
 {
     if ($rights != 1)
     {
         $user_mailtext = $sendbo[0]['content'];
+	$lo_real_id = $sendbo[0]['pref_id'];
     }
     else
     {
@@ -164,9 +165,10 @@ foreach ($users as $user)
         }
 
         $user_mailtext = str_replace('%%LO CONTENT%%',$lo_mailtext,$mailtext);
+	$lo_real_id = 1;
     }
 
-        mail_utf8($user['email'], "$subject", $user_mailtext, change_link($user['sid']));
+        mail_utf8($db,$user['email'], "$subject", $user_mailtext, from_header($lo_real_id), change_link($user['sid']));
 	
 	if ($testmail)
 	{
@@ -192,13 +194,12 @@ echo '
 ';
 if (!$testmail)
 {
-$db = new db($dbLang, $dbName);
 if ($rights == 1)
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");
 else
   $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
-$db->close();
 }
+$db->close();
 }?>
 	<div class="span8">
 	  <div class="well">
@@ -260,7 +261,7 @@ echo '
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
       </footer>
 
     </div><!--/.fluid-container-->

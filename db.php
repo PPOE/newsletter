@@ -34,8 +34,9 @@ public function query($query)
     case 'mysql':
       $result = mysql_query($query);
       if (!$result)
-        return $false;
-
+        return false;
+      if ($result === true)
+	return true;
       while ($line = mysql_fetch_assoc($result)) {
         $result_array[] = $line;
       }
@@ -86,8 +87,21 @@ function login($db, $user, $pass)
   $data = $db->query("SELECT usr_id,usr_password FROM ppoe_mitglieder.adm_users WHERE usr_login_name = '$user'");
   if (count($data) == 1)
   {
-    $passwordHasher = new PasswordHash(9, true);
-    $success = $passwordHasher->CheckPassword($pass, $data[0]['usr_password']);
+    $pass_hash = $data[0]['usr_password'];
+    $success = false;
+    if (substr($pass_hash,0,1) == '$')
+    {
+      $passwordHasher = new PasswordHash(9, true);
+      $success = $passwordHasher->CheckPassword($pass,$pass_hash);
+    }
+    elseif(md5($pass) == $pass_hash)
+    {
+      $succsss = true;
+    }
+    else
+    {
+      return "Allem Anschein nach hat ein Riesendinosaurier mit Laseraugen dein Passwort zerschossen. OMG SIE SIND HI...krrrrks.";
+    }
     $usr_id = $data[0]['usr_id'];
     if ($success)
     {
@@ -97,6 +111,7 @@ function login($db, $user, $pass)
       header("Location: https://mitglieder.piratenpartei.at/newsletter/login.php");
     }
   }
+  return "Username oder Passwort falsch!";
 }
 
 function checklogin($db)
