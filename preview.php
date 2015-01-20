@@ -139,7 +139,7 @@ foreach ($users as $user)
     $subject = stripslashes($sendsubject[0]['content']);
     $lo_real_id = $sendbo[0]['pref_id'];
 
-        mail_utf8($db, $user['email'], "[Presseinformation Piratenpartei] $subject", $user_mailtext, from_header($lo_real_id), change_link($user['sid']));
+        mail_utf8($db, $user['email'], "$tag $subject", $user_mailtext, from_header($lo_real_id), change_link($user['sid']));
 	
 	if ($testmail)
 	{
