@@ -5,8 +5,19 @@ require("mail.php");
 
 $db = new db($dbLang, $dbName);
 
-$rights = checklogin($db);
-$usr_id = checklogin_id($db);
+$rights = checklogin($access);
+$persons = "2 Personen";
+$personsn = 2;
+$secondeyes = " AND second_eyes_usr_id IS NOT NULL ";
+if ($rights == 129)
+{
+  $persons = "1 Person";
+  $personsn = 1;
+  $secondeyes = "";
+}
+$usr_id = -1;
+if ($gCurrentUser)
+  $usr_id = $gCurrentUser->getValue('usr_id');
 
 $header_location = "Location: " . $baseUrl . "login.php";
 if ($rights == 0)
@@ -14,50 +25,31 @@ if ($rights == 0)
   header("$header_location");
 }
 
-$selector = $rights == 1 ? 'pref_id > 0' : "pref_id = $rights OR pref_id = -$rights";
-$articles = $db->query("SELECT * FROM content WHERE $selector ORDER BY pref_id");
+$selector = "pref_id = $rights OR pref_id = -$rights";
+$articles = $db->query("SELECT * FROM presse_content WHERE $selector ORDER BY pref_id");
 
 foreach ($articles as $article) {
-  if($rights == 1 && $article['pref_id'] == 1) {
-    $main_text = explode("%%LO CONTENT%%", $article['content']);
-  }
-  else if ($rights != 1 && $article['pref_id'] == $rights) {
-    $main_text = array($article['content'],"");
-  }
-  else {
-    if(isset($article['second_eyes_usr_id'])) {
-      $lo = decodePrefs($article['pref_id']);
-      $pre = "--------------- Information der LO " . $lo[0] . " ";
-      $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
-      $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
-      if (strlen($article['content']) > 10)
-        $lo_text[] = $pre . $article['content'] . $post;
-    }
+  if ($article['pref_id'] == $rights) {
+    $main_text = stripslashes($article['content']);
   }
 }
 
-$preview_text_lo = implode('<br><br>', $lo_text);
-$preview_text = $main_text[0].'<br><br>'.$preview_text_lo.'<br><br>'.$main_text[1];
+$sendsubjectpreview = $db->query("SELECT * FROM presse_content WHERE pref_id = -$rights;");
+$subject = stripslashes($sendsubjectpreview[0]['content']);
+
+$preview_text = $main_text;
 
 $testmail = false;
-$eyes = " first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL ";
+$eyes = " first_eyes_usr_id IS NOT NULL $secondeyes ";
 if (isset($_POST['test']) && isset($_POST['testmail']))
 {
   $testmail = true;
   $eyes = " 1 ";
 }
 
-$sendbo = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id = $rights;");
-$sendsubject = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id = -$rights;");
-$sendlos = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id != 1 AND pref_id > 0;");
-if (count($sendbo) == 1)
-  $mailtext = $sendbo[0]['content'];
-$subject_r = $db->query("SELECT * FROM content WHERE pref_id = -$rights;");
-if (count($subject_r) == 1)
-  $subject = $subject_r[0]['content'];
-else
-  $subject = '';
-$users = $db->query("SELECT * FROM users WHERE confirmed AND prefs & $rights");
+$sendbo = $db->query("SELECT * FROM presse_content WHERE " . $eyes . " AND pref_id = $rights;");
+$sendsubject = $db->query("SELECT * FROM presse_content WHERE " . $eyes . " AND pref_id = -$rights;");
+$users = $db->query("SELECT * FROM presse_users WHERE confirmed AND prefs & $rights");
 if (count($sendbo) == 1 && count($sendsubject) == 1)
 {
     $may_send_mails = true;
@@ -66,7 +58,7 @@ if (count($sendbo) == 1 && count($sendsubject) == 1)
 if ($testmail)
 {
   $mailaddr = $db->escape($_POST['testmail']);
-  $users = $db->query("SELECT * FROM users WHERE confirmed AND prefs & $rights AND email = '$mailaddr' LIMIT 1");
+  $users = $db->query("SELECT * FROM presse_users WHERE confirmed AND prefs & $rights AND email = $mailaddr LIMIT 1");
 }
 
 if ($testmail || (isset($_POST['sendmails']) && $may_send_mails)) {
@@ -87,9 +79,9 @@ end:
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
+    <title>Piratenpartei Presseverteiler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
+    <meta name="description" content="Hier können sich Interessenten für Presseinformationen der Piratenpartei Österreichs anmelden.">
     <meta name="author" content="Piratenpartei Österreichs">
 
     <!-- Le styles -->
@@ -133,40 +125,21 @@ if ($sendmails)
             <h3 id="please_wait">Bitte warten...</h3>
               <p>
 ';
+$db = new db($dbLang, $dbName);
 if (!$testmail)
 {
-$db = new db($dbLang, $dbName);
-if ($rights == 1)
-  $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");
-else
-  $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
-$db->close();
+$db->query("UPDATE presse_content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
 }
 $user_count = count($users);
 $nth = 10;
+$lo_real_id = 1;
 foreach ($users as $user)
 {
-    if ($rights != 1)
-    {
-        $user_mailtext = $sendbo[0]['content'];
-    }
-    else
-    {
-        $lo_mailtext = '';
-        foreach ($sendlos as $sendlo)
-        {
-	      $lo = decodePrefs($sendlo['pref_id']);
-	      $pre = "--------------- Information der LO " . $lo[0] . " "; 
-	      $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
-	      $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
-	      if (strlen($article['content']) > 10 && intval($sendlo['pref_id']) & intval($user['prefs']))
-                        $lo_mailtext .= $pre . $sendlo['content'] . $post;
-        }
+    $user_mailtext = stripslashes($sendbo[0]['content']);
+    $subject = stripslashes($sendsubject[0]['content']);
+    $lo_real_id = $sendbo[0]['pref_id'];
 
-        $user_mailtext = str_replace('%%LO CONTENT%%',$lo_mailtext,$mailtext);
-    }
-
-        mail_utf8($user['email'], "$subject", $user_mailtext, change_link($user['sid']));
+        mail_utf8($db, $user['email'], "[Presseinformation Piratenpartei] $subject", $user_mailtext, from_header($lo_real_id), change_link($user['sid']));
 	
 	if ($testmail)
 	{
@@ -192,13 +165,12 @@ echo '
 ';
 if (!$testmail)
 {
-$db = new db($dbLang, $dbName);
 if ($rights == 1)
-  $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");
+  $db->query("UPDATE presse_content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");
 else
-  $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
-$db->close();
+  $db->query("UPDATE presse_content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $rights OR pref_id = -$rights;");
 }
+$db->close();
 }?>
 	<div class="span8">
 	  <div class="well">
@@ -208,10 +180,10 @@ $db->close();
 if ($may_send_mails)
 echo '
 	      <input type="hidden" name="sendmails" value="true" />
-	      <input type="submit" class="btn btn-success" value="Newsletter aussenden" />
+	      <input type="submit" class="btn btn-success" value="Pressemitteilung aussenden" />
 ';
 ?>
-	      <a class="btn" href="create.php">Newsletter bearbeiten</a>
+	      <a class="btn" href="create.php">Pressemitteilung bearbeiten</a>
               <textarea style="width:180px;" rows="1" name="testmail"></textarea>
               <input type="submit" class="btn btn-success" name="test" value="Test an diese Mailadresse aussenden" />
               </form></p>
@@ -221,12 +193,12 @@ echo '
 	</div>
         <div class="span4">
 <?
-$article = $subject_r[0];
+$article = $sendsubjectpreview[0];
 $admins = "";
 $prefs = decodePrefs($article['pref_id']);
 $send = true;
 if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
-if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];} else {$send = false;}
+if ($personsn >= 2) { if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];} else {$send = false;} }
 $admins = getAdminNames($admins);
 if ($send) {$send_color = "alert-success";} else {$send_color = "alert-danger";}
 echo '
@@ -238,13 +210,13 @@ echo '
 foreach ($articles as $article)
 {
 if ($article['pref_id'] < 0) {continue;}
-if ($rights != 1 && !(intval($article['pref_id']) & $rights))
+if (!(intval($article['pref_id']) & $rights))
   continue;
 $admins = "";
 $prefs = decodePrefs($article['pref_id']);
 $send = true;
 if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
-if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];} else {$send = false;}
+if ($personsn >= 2) { if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];} else {$send = false;} }
 $admins = getAdminNames($admins);
 if ($send) {$send_color = "alert-success";} else {$send_color = "alert-danger";}
 echo '
@@ -260,7 +232,7 @@ echo '
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->

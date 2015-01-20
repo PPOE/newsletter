@@ -9,11 +9,14 @@ $noe = isset($_POST['noe']) ? $_POST['noe'] : '';
 $ooe = isset($_POST['ooe']) ? $_POST['ooe'] : '';
 $sbg = isset($_POST['sbg']) ? $_POST['sbg'] : '';
 $stmk = isset($_POST['stmk']) ? $_POST['stmk'] : '';
+$graz = isset($_POST['graz']) ? $_POST['graz'] : '';
 $vlbg = isset($_POST['vlbg']) ? $_POST['vlbg'] : '';
 $w = isset($_POST['w']) ? $_POST['w'] : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $s_get = isset($_GET['s']) ? $_GET['s'] : '';
 $q_get = isset($_GET['q']) ? $_GET['q'] : '';
+
+$mailqueue = true;
 
 require("db.php");
 require("config.php");
@@ -46,8 +49,7 @@ if($_POST['delete'] == "true") {
   $delete = "true";
 }
 
-$prefs = 1;
-//if($bund == "bund") {$prefs += 1;}
+if($bund == "bund") {$prefs += 1;}
 if($bgld == "bgld") {$prefs += 2;}
 if($ktn == "ktn") {$prefs += 4;}
 if($noe == "noe") {$prefs += 8;}
@@ -56,9 +58,10 @@ if($sbg == "sbg") {$prefs += 32;}
 if($stmk == "stmk") {$prefs += 64;}
 if($vlbg == "vlbg") {$prefs += 128;}
 if($w == "w") {$prefs += 256;}
+if($graz == "graz") {$prefs += 512;}
 
-$id = $db->query("SELECT id FROM users WHERE sid = '$sid' LIMIT 1;");
-$email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1;");
+$id = $db->query("SELECT id FROM presse_users WHERE sid = '$sid' LIMIT 1;");
+$email = $db->query("SELECT email FROM presse_users WHERE sid = '$sid' LIMIT 1;");
 $email = $email[0]['email'];
 
 if (count($id[0]['id']) == '')
@@ -68,23 +71,23 @@ if (count($id[0]['id']) == '')
 }
 
 if ($delete == "true") {
-  $db->query("DELETE FROM users WHERE sid = $sid;");
+  $db->query("DELETE FROM presse_users WHERE sid = $sid;");
   $display = "#confirm_view {display:none;}\n#change_view {display:none;}";
-  mail_utf8($email, "[Piraten-Newsletter] Newsletter abbestellt", "Ab sofort erhältst du keinen Newsletter mehr. Außerdem wurden deine Daten aus unserer Datenbank unwiderbringlich gelöscht.");
+  mail_utf8($db, $email, "$tag Presseverteiler abbestellt", "Ab sofort erhalten Sie von uns keine Pressemitteilungen mehr. Ihre Daten wurden aus unserer Datenbank unwiderbringlich gelöscht.",from_header(1));
   goto end;
 }
 
-$db->query("UPDATE users SET prefs = $prefs WHERE sid = $sid;");
-mail_utf8($email, "[Piraten-Newsletter] Einstellung geändert", "Deine Newslettereinstellungen wurden geändert. Mit einem Klick auf den folgenden Klick können die Einstellungen noch einmal geändert werden:\n".change_link($sid));
+$db->query("UPDATE presse_users SET prefs = $prefs WHERE sid = $sid;");
+mail_utf8($db, $email, "$tag Einstellung geändert", "Ihre Presseverteiler-Einstellungen wurden geändert. Mit einem Klick auf den folgenden Klick können die Einstellungen noch einmal geändert werden:\n".change_link($sid),from_header(1));
 
-$prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
+$prefs = $db->query("SELECT prefs FROM presse_users WHERE sid = $sid;");
 $prefs = $prefs[0]['prefs'];
 
 $display = "#change_view {display:none;}\n#delete_view {display:none;}";
 end:
 if ($sid != null)
 {
-	$prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
+	$prefs = $db->query("SELECT prefs FROM presse_users WHERE sid = $sid;");
 	$prefs = $prefs[0]['prefs'];
 }
 $db->close();
@@ -94,9 +97,9 @@ $db->close();
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
+    <title>Piratenpartei Presseverteiler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
+    <meta name="description" content="Hier können sich Interessenten für Presseinformationen der Piratenpartei Österreichs anmelden.">
     <meta name="author" content="Piratenpartei Österreichs">
 
     <!-- Le styles -->
@@ -134,10 +137,10 @@ $db->close();
         <div class="span8">
           <div id="delete_view" class="well">
             <h1>Abmeldung erfolgreich!</h1>
-	    <p>Ab sofort wurde der Versand von Newslettern an dich gestoppt und deine Daten unwiderbringlich gelöscht!</p> 
+	    <p>Ab sofort wurde der Versand von Presseinformationen der Piratenpartei an Sie gestoppt und ihre Daten unwiderbringlich gelöscht!</p> 
           </div>
 	  <div id="confirm_view" class="well">
-	    <h1>Deine Einstellungen wurden erfolgreich geändert!</h1>
+	    <h1>Ihre Einstellungen wurden erfolgreich geändert!</h1>
 	  </div>
 <?
 if($error != "") {
@@ -145,14 +148,13 @@ if($error != "") {
 }
 ?>
 	  <div id="change_view" class="well">
-	    <h1>Newsletter-Einstellungen bearbeiten</h1>
-	    <p>Hier kannst du deine Newsletter-Einstellungen bearbeiten:</p>
+	    <h1>Presseverteiler-Einstellungen bearbeiten</h1>
+	    <p>Hier können Sie ihre Presseverteiler-Einstellungen bearbeiten:</p>
 	    <?echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
                 <div>
-                  <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
+                  <h4>Für welche Presseinformationen möchten Sie sich registieren?</h4>
 <?
-echo '			<input type="hidden" name="bund" value="bund"/>';
-echo '                  <label class="checkbox"><input type="checkbox" name="" value="" checked="checked" disabled>Bundesweite Informationen</label>';
+echo '                  <label class="checkbox"><input type="checkbox" name="bund" value="bund" checked="checked">Bundesweite Informationen</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="bgld" value="bgld" '.($prefs & 2 ? 'checked="checked"' : '').'>Burgenland</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="ktn" value="ktn" '.($prefs & 4 ? 'checked="checked"' : '').'>Kärnten</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="noe" value="noe" '.($prefs & 8 ? 'checked="checked"' : '').'>Niederösterreich</label>';
@@ -161,23 +163,24 @@ echo '                  <label class="checkbox"><input type="checkbox" name="sbg
 echo '                  <label class="checkbox"><input type="checkbox" name="stmk" value="stmk" '.($prefs & 64 ? 'checked="checked"' : '').'>Steiermark</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg" '.($prefs & 128 ? 'checked="checked"' : '').'>Vorarlberg</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="w" value="w" '.($prefs & 256 ? 'checked="checked"' : '').'>Wien</label>';
+echo '                  <label class="checkbox"><input type="checkbox" name="graz" value="graz" '.($prefs & 512 ? 'checked="checked"' : '').'>Graz</label>';
 ?>
                 </div>
               <input type="hidden" name="submit" value="true" />
               <button type="submit" class="btn">Absenden</button>
             </form>
 	    <?echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
-              <h4>Willst du den Newsletter abbestellen?</h4>
+              <h4>Möchten Sie unsere Presseinformationen ganz abbestellen?</h4>
 	      <input type="hidden" name="submit" value="true" />
 	      <input type="hidden" name="delete" value="true" />
-	      <button type="submit" class="btn btn-danger">Newsletter abbestellen</button>
+	      <button type="submit" class="btn btn-danger">Presseinformationen abbestellen</button>
 	    </form>
 	  </div>
         </div><!--/span-->
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->

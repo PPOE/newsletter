@@ -20,21 +20,21 @@ $sid = $q_array[0];
 
 $db = new db($dbLang, $dbName);
 
-$confirmed = $db->query("SELECT confirmed FROM users WHERE sid = '$sid' LIMIT 1");
+$confirmed = $db->query("SELECT confirmed FROM presse_users WHERE sid = '$sid' LIMIT 1");
 if ($confirmed[0]['confirmed'] != 0 && $confirmed[0]['confirmed'] != 'f')
 {
   $error = "Diese E-Mail-Adresse wurde bereits bestätigt!";
   goto end;
 }
 
-$db->query("UPDATE users SET confirmed=TRUE WHERE sid = '$sid';");
+$db->query("UPDATE presse_users SET confirmed=TRUE WHERE sid = '$sid';");
 
-$email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1");
+$email = $db->query("SELECT email FROM presse_users WHERE sid = '$sid' LIMIT 1");
 $email = $email[0]['email'];
 
-$checkmail_text = "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Ab sofort erhältst du regelmäßig deinen personalisierten Newsletter!\n\n";
-$checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters ansehen und verändern oder den Newsletter abbestellen:\n".change_link($sid);
-mail_utf8($email, "[Piraten-Newsletter] E-Mail-Adresse bestätigt", $checkmail_text);
+$checkmail_text = "Ihre E-Mail-Adresse wurde erfolgreich bestätigt. Ab sofort erhalten Sie regelmäßig die gewählten Presseinformationen!\n\n";
+$checkmail_text .= "Mit einem Klick auf den folgenden Link können Sie auswählen welche Presseinformationen Sie erhalten möchten:\n".change_link($sid);
+mail_utf8($db, $email, "$tag E-Mail-Adresse bestätigt", $checkmail_text, from_header(1));
 
 $db->close();
 $display = "#error_view {display:none;}";
@@ -45,9 +45,9 @@ end:
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
+    <title>Piratenpartei Presseverteiler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
+    <meta name="description" content="Hier können sich Interessenten für Presseinformationen der Piratenpartei Österreichs anmelden.">
     <meta name="author" content="Piratenpartei Österreichs">
 
     <!-- Le styles -->
@@ -84,9 +84,9 @@ end:
       <div class="row">
         <div class="span8">
 	  <div id="confirm_view" class="well">
-	    <h1>Du bist erfolgreich angemeldet!</h1>
-	    <p>Ab sofort erhältst du regelmäßig unseren personalisierten Newsletter. Viel Spa&szlig;!</p>
-	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verändern oder den Newsletter abbestellen:<br><a href="<?echo change_link($sid);?>"><?echo change_link($sid);?></a>
+	    <h1>Sie sind erfolgreich angemeldet!</h1>
+	    <p>Ab sofort erhalten Sie regelmäßig die von ihnen gewählten Presseinformationen. Vielen Dank für ihr Interesse!</p>
+	    <p>Mit einem Klick auf den folgenden Link können Sie auswählen welche Presseinformationen Sie erhalten möchten:<br><a href="<?echo change_link($sid);?>"><?echo change_link($sid);?></a>
 	    <p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
 	  </div>
 	  <div id="error_view" class="well">
@@ -96,13 +96,13 @@ if($error != "") {
   echo "<div class='alert alert-error'>".$error."</div>";
 }
 ?>
-	    <p>Falls dieser Fehler wiederholt auftritt, wende dich an <a href="mailto:bgf@piratenpartei.at">bgf@piratenpartei.at</a>.</p>
+	    <p>Falls dieser Fehler wiederholt auftritt, wenden Sie sich bitte an <a href="mailto:bgf@piratenpartei.at">bgf@piratenpartei.at</a>.</p>
 	  </div>
         </div><!--/span-->
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->

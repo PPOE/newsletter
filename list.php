@@ -5,7 +5,10 @@ require("config.php");
 $db = new db($dbLang, $dbName);
 
 $header_location = "Location: " . $baseUrl . "login.php";
-$rights = checklogin($db);
+$rights = checklogin($access);
+$usr_id = -1;
+if ($gCurrentUser)
+  $usr_id = $gCurrentUser->getValue('usr_id');
 if (!($rights > 0))
 {
 header("$header_location");
@@ -16,11 +19,11 @@ if(isset($_POST['delete'])) {
     $error = "Ein Fehler beim Löschen ist aufgetreten!";
     goto end;
   }
-  $db->query("DELETE FROM users WHERE email = '{$_POST['email']}' AND prefs & $rights");
+  $db->query("DELETE FROM presse_users WHERE email = '{$_POST['email']}' AND prefs & $rights");
 }
 if ($rights & 1)
   $rights = 1;
-$users = $db->query("SELECT * FROM users WHERE prefs & $rights;");
+$users = $db->query("SELECT * FROM presse_users WHERE prefs & $rights;");
 
 end:
 $db->close();
@@ -31,9 +34,9 @@ $db->close();
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
+    <title>Piratenpartei Presseverteiler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
+    <meta name="description" content="Hier können sich Interessenten für Presseinformationen der Piratenpartei Österreichs anmelden.">
     <meta name="author" content="Piratenpartei Österreichs">
 
     <!-- Le styles -->
@@ -88,7 +91,7 @@ foreach ($users as $user)
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Hubertusstraße 21, 8042 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->

@@ -1,5 +1,77 @@
 <?php
-require("../adm_program/libs/phpass/passwordhash.php");
+require_once('../adm_program/system/common.php');
+require_once('../adm_program/system/classes/list_configuration.php');
+require_once('../adm_program/system/classes/table_roles.php');
+
+// prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
+global $mailqueue;
+if (!isset($mailqueue) || !$mailqueue)
+{
+if($gCurrentUser && $gCurrentUser->editUsers() == false)
+{
+$roles = array(2,37,38,39,40,41,42,43,44,45,129);
+$access = array();
+foreach ($roles as $getRoleId)
+{
+// Rollenobjekt erzeugen
+$role = new TableRoles($gDb, $getRoleId);
+
+//Testen ob Recht zur Listeneinsicht besteht
+if($role->viewRole() == false)
+{
+}
+else
+{
+  $access[] = $getRoleId;
+  if ($getRoleId == 2)
+  {
+    $access = array(2);
+    break;
+  }
+}
+}
+if (count($access) == 0)
+{
+if(!$gCurrentUser || !$gValidLogin)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+}
+}
+else
+{
+  $access = array(2);
+}
+//Verwaltung der Session
+$_SESSION['navigation']->clear();
+$_SESSION['navigation']->addUrl(CURRENT_URL);
+}
+
+function checklogin($access)
+{
+if (in_array(2,$access))
+  return 1;
+if (in_array(38,$access))
+  return 2;
+if (in_array(40,$access))
+  return 4;
+if (in_array(39,$access))
+  return 8;
+if (in_array(41,$access))
+  return 16;
+if (in_array(42,$access))
+  return 32;
+if (in_array(43,$access))
+  return 64;
+if (in_array(45,$access))
+  return 128;
+if (in_array(37,$access))
+  return 256;
+if (in_array(129,$access))
+  return 512;
+return 0;
+}
+
 class db {
 private $dbConn_ = null;
 public $dbType_ = null;
@@ -35,7 +107,8 @@ public function query($query)
       $result = mysql_query($query);
       if (!$result)
         return $false;
-
+      if ($result === true)
+ 	return true;
       while ($line = mysql_fetch_assoc($result)) {
         $result_array[] = $line;
       }
@@ -71,58 +144,13 @@ public function escape($text)
   switch ($this->dbType_)
   {
     case 'mysql':
-      return mysql_escape_string($text);
+      return "'".mysql_escape_string($text)."'";
     case 'pgsql':
-      return pg_escape_string($text);
+      return pg_escape_literal($text);
     default:
       die("invalid dbtype!");
   }
 }
-}
-
-function login($db, $user, $pass)
-{
-  $user = $db->escape($user);
-  $data = $db->query("SELECT usr_id,usr_password FROM ppoe_mitglieder.adm_users WHERE usr_login_name = '$user'");
-  if (count($data) == 1)
-  {
-    $passwordHasher = new PasswordHash(9, true);
-    $success = $passwordHasher->CheckPassword($pass, $data[0]['usr_password']);
-    $usr_id = $data[0]['usr_id'];
-    if ($success)
-    {
-      $rand = mt_rand();
-      $db->query("UPDATE admins SET cookie = $rand, login = now() WHERE usr_id = $usr_id");
-      setcookie("pp_newsletter_login", $rand, time()+86400);
-      header("Location: https://mitglieder.piratenpartei.at/newsletter/login.php");
-    }
-  }
-}
-
-function checklogin($db)
-{
-  if (isset($_COOKIE["pp_newsletter_login"]) && preg_match('/^-?\d+$/', $_COOKIE["pp_newsletter_login"]) == 1)
-  {
-    $admins = $db->query("SELECT * FROM admins WHERE cookie = {$_COOKIE["pp_newsletter_login"]} AND login > now() - " . ($db->dbType_ == 'mysql' ? "INTERVAL 24 HOUR" : "'24 hours'::interval"));
-    if (count($admins) == 1)
-    {
-      return intval($admins[0]['rights']);
-    }
-  }
-  return 0;
-}
-
-function checklogin_id($db)
-{
-  if (isset($_COOKIE["pp_newsletter_login"]) && preg_match('/^-?\d+$/', $_COOKIE["pp_newsletter_login"]) == 1)
-  {
-    $admins = $db->query("SELECT * FROM admins WHERE cookie = {$_COOKIE["pp_newsletter_login"]} AND login > now() - " . ($db->dbType_ == 'mysql' ? "INTERVAL 24 HOUR" : "'24 hours'::interval"));
-    if (count($admins) == 1)
-    {
-      return intval($admins[0]['usr_id']);
-    }
-  }
-  return 0;
 }
 
 function decodePrefs($prefs)
@@ -146,6 +174,8 @@ function decodePrefs($prefs)
     $pa[] = "Vorarlberg";
   if ($prefs & 256)
     $pa[] = "Wien";
+  if ($prefs & 512)
+    $pa[] = "Graz";
   return $pa;
 }
 

@@ -5,18 +5,29 @@ require("mail.php");
 
 $db = new db($dbLang, $dbName);
 
-$rights = checklogin($db);
-$usr_id = checklogin_id($db);
+$rights = checklogin($access);
+$persons = "2 Personen";
+$personsn = 2;
+$secondeyes = " AND second_eyes_usr_id IS NOT NULL ";
+if ($rights == 129)
+{
+  $persons = "1 Person";
+  $personsn = 1;
+  $secondeyes = "";
+}
+$usr_id = -1;
+if ($gCurrentUser)
+  $usr_id = $gCurrentUser->getValue('usr_id');
 $pref_id = intval($_POST['pref_id']);
 $header_location = "Location: " . $baseUrl . "login.php";
-if ($rights != 1 && ($rights == 0 || ($pref_id != 0 && !($pref_id & $rights || -($pref_id) & $rights))))
+if (!$rights || ($rights != 1 && ($rights == 0 || ($pref_id != 0 && !($pref_id & $rights || -($pref_id) & $rights)))))
 {
   header("$header_location");
 }
 if (isset($_POST['save']))
 {
 	$save = true;
-	$db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
+	$db->query("UPDATE presse_content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
 }
 if (isset($_POST['publish']))
 {
@@ -25,31 +36,27 @@ if (isset($_POST['publish']))
 if ($save)
 {
 	$content = $db->escape($_POST['content']);
-        if ($pref_id == 1 && preg_match('/%%LO CONTENT%%/s',$content) != 1)
-        {
-          $publish = false;
-        }
-        $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
-	$db->query("UPDATE content SET content = '$content' WHERE pref_id = $pref_id");
+        $db->query("UPDATE presse_content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
+	$db->query("UPDATE presse_content SET content = $content WHERE pref_id = $pref_id");
 }
 if ($publish)
 {
-	$eyes_usr_id = $db->query("SELECT first_eyes_usr_id, second_eyes_usr_id FROM content WHERE pref_id = $pref_id");
+	$eyes_usr_id = $db->query("SELECT first_eyes_usr_id, second_eyes_usr_id FROM presse_content WHERE pref_id = $pref_id");
 	if ((preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) == 1 && $eyes_usr_id[0]['first_eyes_usr_id'] == $usr_id) ||
             (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) == 1 && $eyes_usr_id[0]['second_eyes_usr_id'] == $usr_id)) {}
-	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) != 1) {$db->query("UPDATE content SET first_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
-	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) != 1) {$db->query("UPDATE content SET second_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
+	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) != 1) {$db->query("UPDATE presse_content SET first_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
+	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) != 1) {$db->query("UPDATE presse_content SET second_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
         else { }
 
-	$sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = 1;");
-        $sendsubject = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = -1;");
+	$sendbo = $db->query("SELECT * FROM presse_content WHERE first_eyes_usr_id IS NOT NULL $secondeyes AND pref_id = 1;");
+        $sendsubject = $db->query("SELECT * FROM presse_content WHERE first_eyes_usr_id IS NOT NULL $secondeyes AND pref_id = -1;");
 	if (count($sendbo) == 1 && count($sendsubject) == 1)
 	{
 		$sendmails = true;
 	}
 }
 
-$articles = $db->query("SELECT * FROM content WHERE NOT sent ORDER BY pref_id");
+$articles = $db->query("SELECT * FROM presse_content WHERE (pref_id = $rights OR pref_id = -$rights) AND NOT sent ORDER BY pref_id");
 
 $db->close();
 
@@ -60,9 +67,9 @@ end:
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
+    <title>Piratenpartei Presseverteiler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
+    <meta name="description" content="Hier können sich Interessenten für Presseinformationen der Piratenpartei Österreichs anmelden.">
     <meta name="author" content="Piratenpartei Österreichs">
 
     <!-- Le styles -->
@@ -114,10 +121,10 @@ echo '
             <h3>Betreff bearbeiten</h3>
             <div><form action="create.php" method="POST">
               <input type="hidden" name="pref_id" value="'.$article['pref_id'].'" />
-              <textarea style="width:60%;" rows="1" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.$article['content'].'</textarea><br />
+              <textarea style="width:60%;" rows="1" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.stripslashes($article['content']).'</textarea><br />
               <input type="submit" class="btn" name="save" value="Speichern (ohne Versandfreigabe)" />
               <input type="submit" class="btn" id="publish'.$article['pref_id'].'" name="publish" value="Versandfreigabe (ohne Speichern)" />
-              <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
+              <p>Versandfreigabe erfolgt durch ('.$persons.'): '.implode(", ", $admins).'</p>
             </form></div>
           </div>
         </div><!--/span-->
@@ -134,14 +141,9 @@ $admins = "";
 $prefs = decodePrefs($article['pref_id']);
 if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
 if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];}
-$send_btn = "";
 $admins = getAdminNames($admins);
 $area_note = "";
 $send_btn = "<p><a href='preview.php' class='btn btn-success'>Vorschau</a></p>";
-if ($article['pref_id'] == 1)
-{
-  $area_note = "<br />Beachte dass der Text die Zeichenfolge <code>%%LO CONTENT%%</code> enthalten muss. An dieser Stelle wird der LO-spezifische Inhalt eingefügt.";
-}
 echo '
         <div class="span12">
           <div class="well">
@@ -151,10 +153,10 @@ echo '
 	      <input type="hidden" name="pref_id" value="'.$article['pref_id'].'" />
               <input type="hidden" name="id" value="'.$article['id'].'" />
               <p>Bereich: '.$prefs[0].$area_note.'</p>
-              <textarea style="width:60%;" rows="5" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.$article['content'].'</textarea><br />
+              <textarea style="width:60%;" rows="5" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.stripslashes($article['content']).'</textarea><br />
               <input type="submit" class="btn" name="save" value="Speichern (ohne Versandfreigabe)" />
               <input type="submit" class="btn" id="publish'.$article['pref_id'].'" name="publish" value="Versandfreigabe (ohne Speichern)" />
-              <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
+              <p>Versandfreigabe erfolgt durch ('.$persons.'): '.implode(", ", $admins).'</p>
             </form></div>
 	  </div>
         </div><!--/span-->
@@ -164,7 +166,7 @@ echo '
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->

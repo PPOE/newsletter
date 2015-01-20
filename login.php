@@ -6,35 +6,15 @@ require("config.php");
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $name = isset($_POST['name']) ? $_POST['name'] : '';
 $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
-
-$db = new db($dbLang, $dbName);
-
-if (checklogin($db) == 0 && $submit == "true"){
-  login($db, $name, $pass);
-}
-
-if (checklogin($db) > 0)
-{
-  $display = "#login_view {display:none;}";
-}
-else
-{
-  $display = "#subp_view {display:none;}";
-}
-
-
-$db->close();
-
-end:
 ?>
 
 <!DOCTYPE html>
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
+    <title>Piratenpartei Presseverteiler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
+    <meta name="description" content="Hier können sich Interessenten für Presseinformationen der Piratenpartei Österreichs anmelden.">
     <meta name="author" content="Piratenpartei Österreichs">
 
     <!-- Le styles -->
@@ -71,26 +51,6 @@ end:
     <div class="container">
       <div class="row">
         <div class="span8">
-	  <div id="login_view" class="well">
-	    <h1>Piraten-Newsletter</h1>
-<?
-if($error != "") {
-  echo "<div class='alert alert-error'>".$error."</div>";
-}
-?>
-	    <form action="login.php" method="post">
-		<div class="input-prepend">
-		  <span class="add-on">Name:</span>
-		  <input id="inputName" type="text" name="name" placeholder="Admidio Login Name" value="<? echo $name; ?>">
-		</div>
-                <div class="input-prepend">
-                  <span class="add-on">Passwort:</span>
-                  <input id="inputPass" type="password" name="pass" placeholder="Admidio Login Passwort">
-                </div>
-              <input type="hidden" name="submit" value="true" />
-	      <button type="submit" class="btn">Login</button>
-	    </form>
-	  </div>
           <div id="subp_view" class="well">
             <h1>Admin Bereich</h1>
 <?
@@ -99,13 +59,14 @@ if($error != "") {
 }
 ?>
             <a href="list.php">Teilnehmerliste anzeigen</a><br />
-            <a href="create.php">Newsletter bearbeiten</a><br />
+            <a href="create.php">Presseaussendung bearbeiten</a><br />
+            <a href="registeradm.php">Teilnehmer hinzufügen</a><br />
           </div>
         </div><!--/span-->
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Lange Gasse 1/4, 1080 Wien</p>
+        <p>Piratenpartei Österreichs, Hubertusstraße 21, 8042 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->
