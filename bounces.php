@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(-1);
-ini_set('display_errors', 'On');
+//error_reporting(-1);
+//ini_set('display_errors', 'On');
 
 include_once('config.php');
 include_once("db.php");
@@ -9,10 +9,10 @@ include_once("db.php");
 $url = $redmineBaseUrl . 'issues.json';
 $url .= '?project_id=' . $projectId;
 $url .= '&status_id=open';
-$url .= '&offset=0&limit=10'; // doesn't work
+$url .= '&limit=100'; // doesn't work
 $url .= '&key=' . $redminapiKey;
 
-$contents = false;// file_get_contents($redmineBaseUrl . 'issues.json?project_id=' . $projectId . '&status_id=open&key=' . $redminapiKey);
+$contents = file_get_contents($url);
 if ($contents === false) {
     exit;
 }
@@ -26,12 +26,12 @@ foreach($json->issues as $issue) {
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             // todo: remove them form newsletter
-            //$db->query("DELETE FROM users WHERE email = '{$email}'");
             //print_r($db->query("SELECT * FROM users WHERE email = '{$email}'"));
+            $db->query("DELETE FROM users WHERE email = '{$email}'");
 
             // todo: mark as done
-            /*$url = $redmineBaseUrl . 'issues/' . $issue->id . '.json';
-            $payload = "{\"issue\":{\"status_id\":5,\"notes\":\"test\"}}";
+            $url = $redmineBaseUrl . 'issues/' . $issue->id . '.json';
+            $payload = "{\"issue\":{\"status_id\":5,\"notes\":\"automatisiert erledigt.\"}}";
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -56,7 +56,7 @@ foreach($json->issues as $issue) {
 
             curl_close($curl);
 
-            if ($err) {
+            /*if ($err) {
                 echo "cURL Error #:" . $err;
             } else {
                 echo $response;
