@@ -6,28 +6,6 @@ require("config.php");
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $name = isset($_POST['name']) ? $_POST['name'] : '';
 $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
-
-$db = new db($dbLang, $dbName);
-
-$error = "";
-
-if (checklogin($db) == 0 && $submit == "true"){
-  $error = login($db, $name, $pass);
-}
-
-if (checklogin($db) > 0)
-{
-  $display = "#login_view {display:none;}";
-}
-else
-{
-  $display = "#subp_view {display:none;}";
-}
-
-
-$db->close();
-
-end:
 ?>
 
 <!DOCTYPE html>
@@ -75,31 +53,6 @@ end:
         <div class="span8">
 	  <div id="login_view" class="well">
 	    <h1>Piraten-Newsletter</h1>
-<?
-if($error != "") {
-  echo "<div class='alert alert-error'>".$error."</div>";
-}
-?>
-	    <form action="login.php" method="post">
-		<div class="input-prepend">
-		  <span class="add-on">Name:</span>
-		  <input id="inputName" type="text" name="name" placeholder="Admidio Login Name" value="<? echo $name; ?>">
-		</div>
-                <div class="input-prepend">
-                  <span class="add-on">Passwort:</span>
-                  <input id="inputPass" type="password" name="pass" placeholder="Admidio Login Passwort">
-                </div>
-              <input type="hidden" name="submit" value="true" />
-	      <button type="submit" class="btn">Login</button>
-	    </form>
-	  </div>
-          <div id="subp_view" class="well">
-            <h1>Admin Bereich</h1>
-<?
-if($error != "") {
-  echo "<div class='alert alert-error'>".$error."</div>";
-}
-?>
             <a href="list.php">Teilnehmerliste anzeigen</a><br />
             <a href="create.php">Newsletter bearbeiten</a><br />
           </div>
@@ -107,7 +60,7 @@ if($error != "") {
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
+        <p>Piratenpartei Österreichs, Hubertusstraße 21, 8042 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->

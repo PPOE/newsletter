@@ -5,11 +5,13 @@ require("mail.php");
 
 $db = new db($dbLang, $dbName);
 
-$rights = checklogin($db);
-$usr_id = checklogin_id($db);
+$rights = checklogin($access);
+$usr_id = -1;
+if ($gCurrentUser)
+  $usr_id = $gCurrentUser->getValue('usr_id');
 $pref_id = intval($_POST['pref_id']);
 $header_location = "Location: " . $baseUrl . "login.php";
-if ($rights != 1 && ($rights == 0 || ($pref_id != 0 && !($pref_id & $rights || -($pref_id) & $rights))))
+if (!$rights || ($rights != 1 && ($rights == 0 || ($pref_id != 0 && !($pref_id & $rights || -($pref_id) & $rights)))))
 {
   header("$header_location");
 }
@@ -30,7 +32,7 @@ if ($save)
           $publish = false;
         }
         $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
-	$db->query("UPDATE content SET content = '$content' WHERE pref_id = $pref_id");
+	$db->query("UPDATE content SET content = $content WHERE pref_id = $pref_id");
 }
 if ($publish)
 {
@@ -114,7 +116,7 @@ echo '
             <h3>Betreff bearbeiten</h3>
             <div><form action="create.php" method="POST">
               <input type="hidden" name="pref_id" value="'.$article['pref_id'].'" />
-              <textarea style="width:60%;" rows="1" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.$article['content'].'</textarea><br />
+              <textarea style="width:60%;" rows="1" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.stripslashes($article['content']).'</textarea><br />
               <input type="submit" class="btn" name="save" value="Speichern (ohne Versandfreigabe)" />
               <input type="submit" class="btn" id="publish'.$article['pref_id'].'" name="publish" value="Versandfreigabe (ohne Speichern)" />
               <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
@@ -151,7 +153,7 @@ echo '
 	      <input type="hidden" name="pref_id" value="'.$article['pref_id'].'" />
               <input type="hidden" name="id" value="'.$article['id'].'" />
               <p>Bereich: '.$prefs[0].$area_note.'</p>
-              <textarea style="width:60%;" rows="5" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.$article['content'].'</textarea><br />
+              <textarea style="width:60%;" rows="5" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.stripslashes($article['content']).'</textarea><br />
               <input type="submit" class="btn" name="save" value="Speichern (ohne Versandfreigabe)" />
               <input type="submit" class="btn" id="publish'.$article['pref_id'].'" name="publish" value="Versandfreigabe (ohne Speichern)" />
               <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
@@ -164,7 +166,7 @@ echo '
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->

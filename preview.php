@@ -5,8 +5,10 @@ require("mail.php");
 
 $db = new db($dbLang, $dbName);
 
-$rights = checklogin($db);
-$usr_id = checklogin_id($db);
+$rights = checklogin($access);
+$usr_id = -1;
+if ($gCurrentUser)
+  $usr_id = $gCurrentUser->getValue('usr_id');
 
 $header_location = "Location: " . $baseUrl . "login.php";
 if ($rights == 0)
@@ -19,10 +21,10 @@ $articles = $db->query("SELECT * FROM content WHERE $selector ORDER BY pref_id")
 
 foreach ($articles as $article) {
   if($rights == 1 && $article['pref_id'] == 1) {
-    $main_text = explode("%%LO CONTENT%%", $article['content']);
+    $main_text = explode("%%LO CONTENT%%", stripslashes($article['content']));
   }
   else if ($rights != 1 && $article['pref_id'] == $rights) {
-    $main_text = array($article['content'],"");
+    $main_text = array(stripslashes($article['content']),"");
   }
   else {
     if(isset($article['second_eyes_usr_id']) && $article['pref_id'] > 0) {
@@ -30,8 +32,8 @@ foreach ($articles as $article) {
       $pre = "--------------- Information der LO " . $lo[0] . " ";
       $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
       $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
-      if (strlen($article['content']) > 10)
-        $lo_text[] = $pre . $article['content'] . $post;
+      if (strlen(stripslashes($article['content'])) > 10)
+        $lo_text[] = $pre . stripslashes($article['content']) . $post;
     }
   }
 }
@@ -51,10 +53,10 @@ $sendbo = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id = $r
 $sendsubject = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id = -$rights;");
 $sendlos = $db->query("SELECT * FROM content WHERE " . $eyes . " AND pref_id != 1 AND pref_id > 0;");
 if (count($sendbo) == 1)
-  $mailtext = $sendbo[0]['content'];
+  $mailtext = stripslashes($sendbo[0]['content']);
 $subject_r = $db->query("SELECT * FROM content WHERE pref_id = -$rights;");
 if (count($subject_r) == 1)
-  $subject = $subject_r[0]['content'];
+  $subject = stripslashes($subject_r[0]['content']);
 else
   $subject = '';
 $users = $db->query("SELECT * FROM users WHERE confirmed AND prefs & $rights");
@@ -66,7 +68,7 @@ if (count($sendbo) == 1 && count($sendsubject) == 1)
 if ($testmail)
 {
   $mailaddr = $db->escape($_POST['testmail']);
-  $users = $db->query("SELECT * FROM users WHERE confirmed AND prefs & $rights AND email = '$mailaddr' LIMIT 1");
+  $users = $db->query("SELECT * FROM users WHERE confirmed AND prefs & $rights AND email = $mailaddr LIMIT 1");
 }
 
 if ($testmail || (isset($_POST['sendmails']) && $may_send_mails)) {
@@ -148,7 +150,7 @@ foreach ($users as $user)
 {
     if ($rights != 1)
     {
-        $user_mailtext = $sendbo[0]['content'];
+        $user_mailtext = stripslashes($sendbo[0]['content']);
 	$lo_real_id = $sendbo[0]['pref_id'];
     }
     else
@@ -160,8 +162,8 @@ foreach ($users as $user)
 	      $pre = "--------------- Information der LO " . $lo[0] . " "; 
 	      $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
 	      $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
-	      if (strlen($article['content']) > 10 && intval($sendlo['pref_id']) & intval($user['prefs']))
-                        $lo_mailtext .= $pre . $sendlo['content'] . $post;
+	      if (strlen(stripslashes($article['content'])) > 10 && intval($sendlo['pref_id']) & intval($user['prefs']))
+                        $lo_mailtext .= $pre . stripslashes($sendlo['content']) . $post;
         }
 
         $user_mailtext = str_replace('%%LO CONTENT%%',$lo_mailtext,$mailtext);
@@ -185,7 +187,7 @@ echo '
 ';
 if ($i > 0)
   echo '
-            <h3>Versand abgeschlossen.</h3>
+            <h3>Versand wird in den nächsten 10 Minuten abgeschlossen.</h3>
 ';
 echo '
             <script type="text/javascript">document.getElementById("please_wait").style.display="none";</script>
@@ -261,7 +263,7 @@ echo '
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+PIDFILE="/var/run/mailqueue.pid"
+PID=$$
+
+if [ -f "${PIDFILE}" ] && kill -CONT $( cat "${PIDFILE}" ); then
+  echo "mailqueue is already running."
+  exit 1
+fi
+
+echo "${PID}" > "${PIDFILE}"
+
+cd /var/www/newsletter
+
+while true; do
+	cnt=1
+	while [ $cnt -eq 1 ]; do
+		cnt=`php /var/www/newsletter/mailqueue.php | grep "OK" | wc -l`
+	done
+	sleep 60
+done
+

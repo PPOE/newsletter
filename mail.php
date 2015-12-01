@@ -47,7 +47,7 @@ function mail_utf8($db, $to, $subject, $message, $from, $unsubscribe_link = null
 
 --
 
-Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten
+Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien
 
 Impressum: https://www.piratenpartei.at/rechtliches/impressum/
 

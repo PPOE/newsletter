@@ -15,6 +15,8 @@ $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $s_get = isset($_GET['s']) ? $_GET['s'] : '';
 $q_get = isset($_GET['q']) ? $_GET['q'] : '';
 
+$mailqueue = true;
+
 require("db.php");
 require("config.php");
 require("mail.php");
@@ -177,7 +179,7 @@ echo '                  <label class="checkbox"><input type="checkbox" name="w" 
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->

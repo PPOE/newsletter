@@ -2,10 +2,14 @@
 require("db.php");
 require("config.php");
 
+
 $db = new db($dbLang, $dbName);
 
 $header_location = "Location: " . $baseUrl . "login.php";
-$rights = checklogin($db);
+$rights = checklogin($access);
+$usr_id = -1;
+if ($gCurrentUser)
+  $usr_id = $gCurrentUser->getValue('usr_id');
 if (!($rights > 0))
 {
 header("$header_location");
@@ -88,7 +92,7 @@ foreach ($users as $user)
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
+        <p>Piratenpartei Österreichs, Hubertusstraße 21, 8042 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->

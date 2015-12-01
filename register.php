@@ -1,4 +1,7 @@
 <?
+
+$mailqueue = true;
+
 require("db.php");
 require("mail.php");
 require("config.php");
@@ -167,7 +170,7 @@ if($error != "") {
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Birkengasse 55, 3100 St.Pölten</p>
+        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
       </footer>
 
     </div><!--/.fluid-container-->
