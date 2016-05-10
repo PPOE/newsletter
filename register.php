@@ -1,4 +1,4 @@
-<?
+<?php
 
 $mailqueue = true;
 
@@ -97,7 +97,7 @@ end:
 	footer {
 	color: white;
 	}
-<?echo $display;?>
+<?phpecho $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
@@ -135,7 +135,7 @@ Nach Anmeldung wird die E-Mail-Adresse des Beziehers von der Piratenpartei &Ouml
 	  </div>
 	  <div id="form_view" class="well">
 	    <h1>Piraten-Newsletter</h1>
-<?
+<?php
 if($error != "") {
   echo "<div class='alert alert-error'>".$error."</div>";
 }
@@ -143,10 +143,10 @@ if($error != "") {
 	    <p>Hier kannst du dich zum Newsletter der Piratenpartei Österreichs schnell und einfach anmelden.<br>
 	    Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="register.php?dse=1">Datenschutzrichtlinien</a></p>
 	    <form action="register.php" method="post">
-		<h4>Bitte trage hier deine E-Mail-Adresse ein:<?echo $validemail;?></h4>
+		<h4>Bitte trage hier deine E-Mail-Adresse ein:<?phpecho $validemail;?></h4>
 		<div class="input-prepend">
 		  <span class="add-on">@</span>
-		  <input id="inputEmail" type="text" name="email" placeholder="E-Mail-Adresse" value="<? echo $email; ?>">
+		  <input id="inputEmail" type="text" name="email" placeholder="E-Mail-Adresse" value="<?php echo $email; ?>">
 		</div>
 		<div>
 		  <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>

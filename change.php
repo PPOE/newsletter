@@ -1,4 +1,4 @@
-<?
+<?php
 $display = "#confirm_view {display:none;}\n#delete_view {display:none;}";
 
 $email = isset($_POST['email']) ? $_POST['email'] : '';
@@ -112,7 +112,7 @@ $db->close();
 	footer {
 	color: white;
 	}
-<?echo $display;?>
+<?phpecho $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
@@ -141,7 +141,7 @@ $db->close();
 	  <div id="confirm_view" class="well">
 	    <h1>Deine Einstellungen wurden erfolgreich geändert!</h1>
 	  </div>
-<?
+<?php
 if($error != "") {
   echo "<div class='alert alert-error'>".$error."</div>";
 }
@@ -149,10 +149,10 @@ if($error != "") {
 	  <div id="change_view" class="well">
 	    <h1>Newsletter-Einstellungen bearbeiten</h1>
 	    <p>Hier kannst du deine Newsletter-Einstellungen bearbeiten:</p>
-	    <?echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
+	    <?phpecho "<form action=\"".change_link($sid)."\" method=\"post\">";?>
                 <div>
                   <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
-<?
+<?php
 echo '			<input type="hidden" name="bund" value="bund"/>';
 echo '                  <label class="checkbox"><input type="checkbox" name="" value="" checked="checked" disabled>Bundesweite Informationen</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="bgld" value="bgld" '.($prefs & 2 ? 'checked="checked"' : '').'>Burgenland</label>';
@@ -168,7 +168,7 @@ echo '                  <label class="checkbox"><input type="checkbox" name="w" 
               <input type="hidden" name="submit" value="true" />
               <button type="submit" class="btn">Absenden</button>
             </form>
-	    <?echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
+	    <?phpecho "<form action=\"".change_link($sid)."\" method=\"post\">";?>
               <h4>Willst du den Newsletter abbestellen?</h4>
 	      <input type="hidden" name="submit" value="true" />
 	      <input type="hidden" name="delete" value="true" />

@@ -1,4 +1,4 @@
-<?
+<?php
 require("config.php");
 require("db.php");
 require("mail.php");
@@ -126,7 +126,7 @@ end:
 
     <div class="container">
       <div class="row">
-<?
+<?php
 if ($sendmails)
 {
         echo '
@@ -207,7 +207,7 @@ $db->close();
 	  <div class="well">
 	    <h1>Vorschau</h1>
 	    <p><form action="preview.php" method="POST">
-<?
+<?php
 if ($may_send_mails)
 echo '
 	      <input type="hidden" name="sendmails" value="true" />
@@ -218,12 +218,12 @@ echo '
               <textarea style="width:180px;" rows="1" name="testmail"></textarea>
               <input type="submit" class="btn btn-success" name="test" value="Test an diese Mailadresse aussenden" />
               </form></p>
-	    <p>Betreff: <?echo $subject;?></p>
-	    <p><?echo "<pre>".$preview_text."</pre>";?></p>
+	    <p>Betreff: <?phpecho $subject;?></p>
+	    <p><?phpecho "<pre>".$preview_text."</pre>";?></p>
 	  </div>
 	</div>
         <div class="span4">
-<?
+<?php
 $article = $subject_r[0];
 $admins = "";
 $prefs = decodePrefs($article['pref_id']);

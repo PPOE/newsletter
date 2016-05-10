@@ -1,4 +1,4 @@
-<?
+<?php
 require("db.php");
 require("mail.php");
 require("config.php");
@@ -28,7 +28,7 @@ $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
 	footer {
 	color: white;
 	}
-<?echo $display;?>
+<?phpecho $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">

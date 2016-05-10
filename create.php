@@ -1,4 +1,4 @@
-<?
+<?php
 require("config.php");
 require("db.php");
 require("mail.php");
@@ -99,7 +99,7 @@ end:
 
     <div class="container">
       <div class="row">
-<?
+<?php
 foreach ($articles as $article)
 {
 $pid = intval($article['pref_id']);
