@@ -2,9 +2,9 @@
 
 $mailqueue = true;
 
+require("config.php");
 require("db.php");
 require("mail.php");
-require("config.php");
 
 $display = "#welcome_view {display:none;}\n#dse_view {display:none;}";
 

@@ -66,14 +66,18 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
-    sudo apt-get install -y apache2 postgresql postgresql-client php5-common libapache2-mod-php5 php5-cli php-pear php5-pgsql
+    sudo apt-get install -y git apache2 postgresql postgresql-client php5-common libapache2-mod-php5 php5-cli php-pear php5-pgsql
 
     sudo service apache2 restart
 
-    sudo rm /var/www/html/index.html
-    sudo ln -s /vagrant/ /var/www/html
+    sudo rm -r /var/www/html/index.html
+
+    cd /var/www/html/
+    git clone https://github.com/PPOE/admidio.git
+
+    sudo ln -s /vagrant/ /var/www/html/admidio/newsletter
 
     sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD 'password';"
-    createdb -U vagrant newsletter
+    sudo -u postgres createdb newsletter
   SHELL
 end

@@ -1,7 +1,11 @@
 <?php
-require_once('../adm_program/system/common.php');
-require_once('../adm_program/system/classes/list_configuration.php');
-require_once('../adm_program/system/classes/table_roles.php');
+
+$basepath = dirname(dirname($_SERVER['SCRIPT_FILENAME'])).DIRECTORY_SEPARATOR;
+
+require_once($basepath . 'adm_program/system/common.php');
+require_once($basepath . 'adm_program/system/classes/list_configuration.php');
+require_once($basepath . 'adm_program/system/classes/table_roles.php');
+
 global $mailqueue;
 global $gDb;
 $sql = 'SELECT 1
