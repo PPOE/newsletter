@@ -218,8 +218,8 @@ echo '
               <textarea style="width:180px;" rows="1" name="testmail"></textarea>
               <input type="submit" class="btn btn-success" name="test" value="Test an diese Mailadresse aussenden" />
               </form></p>
-	    <p>Betreff: <?phpecho $subject;?></p>
-	    <p><?phpecho "<pre>".$preview_text."</pre>";?></p>
+	    <p>Betreff: <?php echo $subject;?></p>
+	    <p><?php echo "<pre>".$preview_text."</pre>";?></p>
 	  </div>
 	</div>
         <div class="span4">

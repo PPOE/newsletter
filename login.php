@@ -28,7 +28,7 @@ $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
 	footer {
 	color: white;
 	}
-<?phpecho $display;?>
+<?php echo $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">

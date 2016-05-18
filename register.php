@@ -97,7 +97,7 @@ end:
 	footer {
 	color: white;
 	}
-<?phpecho $display;?>
+<?php echo $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
@@ -143,7 +143,7 @@ if($error != "") {
 	    <p>Hier kannst du dich zum Newsletter der Piratenpartei Österreichs schnell und einfach anmelden.<br>
 	    Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="register.php?dse=1">Datenschutzrichtlinien</a></p>
 	    <form action="register.php" method="post">
-		<h4>Bitte trage hier deine E-Mail-Adresse ein:<?phpecho $validemail;?></h4>
+		<h4>Bitte trage hier deine E-Mail-Adresse ein:<?php echo $validemail;?></h4>
 		<div class="input-prepend">
 		  <span class="add-on">@</span>
 		  <input id="inputEmail" type="text" name="email" placeholder="E-Mail-Adresse" value="<?php echo $email; ?>">

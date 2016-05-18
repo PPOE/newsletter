@@ -112,7 +112,7 @@ $db->close();
 	footer {
 	color: white;
 	}
-<?phpecho $display;?>
+<?php echo $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
@@ -149,7 +149,7 @@ if($error != "") {
 	  <div id="change_view" class="well">
 	    <h1>Newsletter-Einstellungen bearbeiten</h1>
 	    <p>Hier kannst du deine Newsletter-Einstellungen bearbeiten:</p>
-	    <?phpecho "<form action=\"".change_link($sid)."\" method=\"post\">";?>
+	    <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
                 <div>
                   <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
 <?php
@@ -168,7 +168,7 @@ echo '                  <label class="checkbox"><input type="checkbox" name="w" 
               <input type="hidden" name="submit" value="true" />
               <button type="submit" class="btn">Absenden</button>
             </form>
-	    <?phpecho "<form action=\"".change_link($sid)."\" method=\"post\">";?>
+	    <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
               <h4>Willst du den Newsletter abbestellen?</h4>
 	      <input type="hidden" name="submit" value="true" />
 	      <input type="hidden" name="delete" value="true" />
