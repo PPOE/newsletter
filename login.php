@@ -1,7 +1,7 @@
 <?php
-require("db.php");
-require("mail.php");
-require("config.php");
+require_once('db.php');
+require_once('mail.php');
+require_once('config.php');
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $name = isset($_POST['name']) ? $_POST['name'] : '';
@@ -20,23 +20,18 @@ $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
-	body {
-	background-color: #4c2582;
+    body {
+    background-color: #4c2582;
         padding-top: 60px;
         padding-bottom: 40px;
         }
-	footer {
-	color: white;
-	}
+    footer {
+    color: white;
+    }
 <?php echo $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- Fav and touch icons
     <link rel="shortcut icon" href="ico/favicon.ico">
@@ -51,8 +46,8 @@ $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
     <div class="container">
       <div class="row">
         <div class="span8">
-	  <div id="login_view" class="well">
-	    <h1>Piraten-Newsletter</h1>
+      <div id="login_view" class="well">
+        <h1>Piraten-Newsletter</h1>
             <a href="list.php">Teilnehmerliste anzeigen</a><br />
             <a href="create.php">Newsletter bearbeiten</a><br />
           </div>
@@ -84,4 +79,4 @@ $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
   </body>
 </html>
 
-<?php //include_once("bounces.php"); ?>
+<?php //require_once('bounces.php'); ?>

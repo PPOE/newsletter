@@ -3,8 +3,8 @@
 //error_reporting(-1);
 //ini_set('display_errors', 'On');
 
-include_once('config.php');
-include_once("db.php");
+require_once('config.php');
+require_once('db.php');
 
 $url = $redmineBaseUrl . 'issues.json';
 $url .= '?project_id=' . $projectId;

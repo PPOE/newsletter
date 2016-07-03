@@ -2,9 +2,9 @@
 
 $mailqueue = true;
 
-require("config.php");
-require("db.php");
-require("mail.php");
+require_once('config.php');
+require_once('db.php');
+require_once('mail.php');
 
 $display = "#welcome_view {display:none;}\n#dse_view {display:none;}";
 
@@ -64,7 +64,7 @@ do
 {
 $sid = mt_rand();
 } while (count($db->query("SELECT * FROM users WHERE sid = $sid")) > 0);
-  
+
 
 $db->query("INSERT INTO users (email, prefs, sid) VALUES ('$email', $prefs, $sid);");
 
@@ -89,23 +89,18 @@ end:
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
-	body {
-	background-color: #4c2582;
+    body {
+    background-color: #4c2582;
         padding-top: 60px;
         padding-bottom: 40px;
         }
-	footer {
-	color: white;
-	}
+    footer {
+    color: white;
+    }
 <?php echo $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- Fav and touch icons
     <link rel="shortcut icon" href="ico/favicon.ico">
@@ -129,43 +124,43 @@ Nach Anmeldung wird die E-Mail-Adresse des Beziehers von der Piratenpartei &Ouml
               <a href="register.php">Zur&uuml;ck</a>
             </p>
           </div>
-	  <div id="welcome_view" class="well">
-	    <h1>Danke für deine Anmeldung!</h1>
-	    <p>An die von dir eingebene E-Mail-Adresse wird in Kürze eine Bestätigungsmail versendet.</p>
-	  </div>
-	  <div id="form_view" class="well">
-	    <h1>Piraten-Newsletter</h1>
+      <div id="welcome_view" class="well">
+        <h1>Danke für deine Anmeldung!</h1>
+        <p>An die von dir eingebene E-Mail-Adresse wird in Kürze eine Bestätigungsmail versendet.</p>
+      </div>
+      <div id="form_view" class="well">
+        <h1>Piraten-Newsletter</h1>
 <?php
 if($error != "") {
   echo "<div class='alert alert-error'>".$error."</div>";
 }
 ?>
-	    <p>Hier kannst du dich zum Newsletter der Piratenpartei Österreichs schnell und einfach anmelden.<br>
-	    Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="register.php?dse=1">Datenschutzrichtlinien</a></p>
-	    <form action="register.php" method="post">
-		<h4>Bitte trage hier deine E-Mail-Adresse ein:<?php echo $validemail;?></h4>
-		<div class="input-prepend">
-		  <span class="add-on">@</span>
-		  <input id="inputEmail" type="text" name="email" placeholder="E-Mail-Adresse" value="<?php echo $email; ?>">
-		</div>
-		<div>
-		  <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
-		  <input type="hidden" name="bund" value="bund" />
-		  <label class="checkbox"><input type="checkbox" name="" value="" checked="checked" disabled>Bundesweite Informationen</label>
-		  <label class="checkbox"><input type="checkbox" name="bgld" value="bgld">Burgenland</label>
-		  <label class="checkbox"><input type="checkbox" name="ktn" value="ktn">Kärnten</label>
-		  <label class="checkbox"><input type="checkbox" name="noe" value="noe">Niederösterreich</label>
-		  <label class="checkbox"><input type="checkbox" name="ooe" value="ooe">Oberösterreich</label>
-		  <label class="checkbox"><input type="checkbox" name="sbg" value="sbg">Salzburg</label>
-		  <label class="checkbox"><input type="checkbox" name="stmk" value="stmk">Steiermark</label>
-		  <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg">Vorarlberg</label>
-		  <label class="checkbox"><input type="checkbox" name="w" value="w">Wien</label>
-		</div>
+        <p>Hier kannst du dich zum Newsletter der Piratenpartei Österreichs schnell und einfach anmelden.<br>
+        Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="register.php?dse=1">Datenschutzrichtlinien</a></p>
+        <form action="register.php" method="post">
+        <h4>Bitte trage hier deine E-Mail-Adresse ein:<?php echo $validemail;?></h4>
+        <div class="input-prepend">
+          <span class="add-on">@</span>
+          <input id="inputEmail" type="text" name="email" placeholder="E-Mail-Adresse" value="<?php echo $email; ?>">
+        </div>
+        <div>
+          <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
+          <input type="hidden" name="bund" value="bund" />
+          <label class="checkbox"><input type="checkbox" name="" value="" checked="checked" disabled>Bundesweite Informationen</label>
+          <label class="checkbox"><input type="checkbox" name="bgld" value="bgld">Burgenland</label>
+          <label class="checkbox"><input type="checkbox" name="ktn" value="ktn">Kärnten</label>
+          <label class="checkbox"><input type="checkbox" name="noe" value="noe">Niederösterreich</label>
+          <label class="checkbox"><input type="checkbox" name="ooe" value="ooe">Oberösterreich</label>
+          <label class="checkbox"><input type="checkbox" name="sbg" value="sbg">Salzburg</label>
+          <label class="checkbox"><input type="checkbox" name="stmk" value="stmk">Steiermark</label>
+          <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg">Vorarlberg</label>
+          <label class="checkbox"><input type="checkbox" name="w" value="w">Wien</label>
+        </div>
               <input type="hidden" name="submit" value="true" />
-	      <button type="submit" class="btn">Absenden</button>
-	    </form>
-			<p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
-	  </div>
+          <button type="submit" class="btn">Absenden</button>
+        </form>
+            <p><a href="https://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
+      </div>
         </div><!--/span-->
       </div><!--/row-->
 

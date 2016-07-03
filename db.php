@@ -101,16 +101,16 @@ public function __construct($dbType, $name, $host = null)
       $this->dbConn_ = mysql_connect($host, $dbUser, $dbPass);
       if (!$this->dbConn_)
       {
-        die('Could not connect: ' . mysql_error());
+        exit('Could not connect: ' . mysql_error());
       }
       mysql_select_db($name, $this->dbConn_);
       break;
     case 'pgsql':
       $this->dbConn_ = pg_connect("dbname=$name")
-        or die('Could not connect: ' . pg_last_error());
+        or exit('Could not connect: ' . pg_last_error());
       break;
     default:
-      die("invalid dbtype!");
+      exit("invalid dbtype!");
   }
 }
 public function query($query)
@@ -123,13 +123,13 @@ public function query($query)
       if (!$result)
         return $false;
       if ($result === true)
- 	return true;
+     return true;
       while ($line = mysql_fetch_assoc($result)) {
         $result_array[] = $line;
       }
       break;
     case 'pgsql':
-      $result = pg_query($query) or die('Abfrage fehlgeschlagen: ' . pg_last_error() . '<br><br>' . $query);
+      $result = pg_query($query) or exit('Abfrage fehlgeschlagen: ' . pg_last_error() . '<br><br>' . $query);
       if (!$result)
         return $false;
       while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
@@ -151,7 +151,7 @@ public function close()
       pg_close($this->dbConn_);
       break;
     default:
-      die("invalid dbtype!");
+      exit("invalid dbtype!");
   }
 }
 public function escape($text)
@@ -163,7 +163,7 @@ public function escape($text)
     case 'pgsql':
       return pg_escape_literal($text);
     default:
-      die("invalid dbtype!");
+      exit("invalid dbtype!");
   }
 }
 }
