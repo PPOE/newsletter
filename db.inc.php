@@ -18,8 +18,7 @@ $sql = 'SELECT 1
            AND rol_id = 127';
 $result_role = $gDb->query($sql);
 $agnewsletter = false;
-if ($gDb->num_rows($result_role) > 0)
-{
+if ($gDb->num_rows($result_role) > 0) {
     $agnewsletter = true;
 }
 if (!isset($mailqueue) || !$mailqueue) {
@@ -87,18 +86,21 @@ class db
         switch ($this->dbType_) {
             case 'mysql':
                 $result = mysql_query($query);
-                if (!$result)
+                if (!$result) {
                     return $false;
-                if ($result === true)
+                }
+                if ($result === true) {
                     return true;
+                }
                 while ($line = mysql_fetch_assoc($result)) {
                     $result_array[] = $line;
                 }
                 break;
             case 'pgsql':
                 $result = pg_query($query) or exit('Abfrage fehlgeschlagen: ' . pg_last_error() . '<br /><br />' . $query);
-                if (!$result)
+                if (!$result) {
                     return $false;
+                }
                 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
                     $result_array[] = $line;
                 }

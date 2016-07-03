@@ -63,15 +63,16 @@ function getAdminNames(array $admins) {
     global $dbLang, $dbName;
     $db = new db($dbLang, $dbName);
     $admin_names = [];
-    foreach ($admins as $admin)
-    {
-        if (preg_match('/^\d+$/', $admin) != 1)
+    foreach ($admins as $admin) {
+        if (preg_match('/^\d+$/', $admin) != 1) {
             continue;
+        }
         $result = $db->query("SELECT usd_value FROM ppoe_mitglieder.adm_user_data WHERE usd_usf_id = 37 AND usd_usr_id = $admin");
-        if (count($result) !== 1)
+        if (count($result) !== 1) {
             $admin_names[] = $admin;
-        else
+        } else {
             $admin_names[] = $result[0]['usd_value'];
+        }
     }
     $db->close();
     return $admin_names;

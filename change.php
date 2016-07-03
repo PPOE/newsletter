@@ -41,7 +41,7 @@ if (count($q_array) <= 1 || preg_match('/^-?\d+$/', $q_array[0]) != 1) {
 
 $sid = $q_array[0];
 
-if ($submit != 'true'){
+if ($submit != 'true') {
     goto end;
 }
 
@@ -64,8 +64,7 @@ $id = $db->query("SELECT id FROM users WHERE sid = '$sid' LIMIT 1;");
 $email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1;");
 $email = $email[0]['email'];
 
-if (count($id[0]['id']) == '')
-{
+if (count($id[0]['id']) == '') {
     $error = 'Ungültige Abfrage, Error-Code: C!';
     goto end;
 }
@@ -85,8 +84,7 @@ $prefs = $prefs[0]['prefs'];
 
 $display = "#change_view {display:none;}\n#delete_view {display:none;}";
 end:
-if ($sid != null)
-{
+if ($sid != null) {
     $prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
     $prefs = $prefs[0]['prefs'];
 }

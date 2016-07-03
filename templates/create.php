@@ -1,14 +1,19 @@
 <div class="row">
     <?php
-    foreach ($articles as $article)
-    {
+    foreach ($articles as $article) {
         $pid = (int) $article['pref_id'];
-        if ($pid > 0)
+        if ($pid > 0) {
             continue;
-        if ($pid < 0 && !(-$pid & $rights))
+        }
+        if ($pid < 0 && !(-$pid & $rights)) {
             continue;
-        if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
-        if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];}
+        }
+        if (isset($article['first_eyes_usr_id'])) {
+            $admins[] = $article['first_eyes_usr_id'];
+        }
+        if (isset($article['second_eyes_usr_id'])) {
+            $admins[] = $article['second_eyes_usr_id'];
+        }
         $admins = getAdminNames($admins);
         echo '
             <div class="col-md-12">
@@ -25,23 +30,27 @@
             </div><!--/col-md--->
         ';
     }
-    foreach ($articles as $article)
-    {
+    foreach ($articles as $article) {
         $pid = (int) $article['pref_id'];
-        if ($pid > 0 && !($pid & $rights) && $rights != 1)
+        if ($pid > 0 && !($pid & $rights) && $rights != 1) {
             continue;
-        if ($pid < 0)
+        }
+        if ($pid < 0) {
             continue;
+        }
         $admins = '';
         $prefs = decodePrefs($article['pref_id']);
-        if (isset($article['first_eyes_usr_id'])) {$admins[] = $article['first_eyes_usr_id'];}
-        if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];}
+        if (isset($article['first_eyes_usr_id'])) {
+            $admins[] = $article['first_eyes_usr_id'];
+        }
+        if (isset($article['second_eyes_usr_id'])) {
+            $admins[] = $article['second_eyes_usr_id'];
+        }
         $send_btn = '';
         $admins = getAdminNames($admins);
         $area_note = '';
         $send_btn = "<p><a href='preview.php' class='btn btn-success'>Vorschau</a></p>";
-        if ($article['pref_id'] == 1)
-        {
+        if ($article['pref_id'] == 1) {
             $area_note = "<br />Beachte dass der Text die Zeichenfolge <code>%%LO CONTENT%%</code> enthalten muss. An dieser Stelle wird der LO-spezifische Inhalt eingefügt.";
         }
         echo '

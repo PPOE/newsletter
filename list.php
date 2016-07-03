@@ -9,10 +9,10 @@ $db = new db($dbLang, $dbName);
 $header_location = 'Location: ' . $baseUrl . 'login.php';
 $rights = checklogin($access);
 $usr_id = -1;
-if ($gCurrentUser)
+if ($gCurrentUser) {
     $usr_id = $gCurrentUser->getValue('usr_id');
-if (!($rights > 0))
-{
+}
+if (!($rights > 0)) {
     header($header_location);
 }
 
@@ -23,8 +23,9 @@ if (isset($_POST['delete'])) {
     }
     $db->query("DELETE FROM users WHERE email = '{$_POST['email']}' AND prefs & $rights");
 }
-if ($rights & 1)
+if ($rights & 1) {
     $rights = 1;
+}
 $users = $db->query("SELECT * FROM users WHERE prefs & $rights;");
 
 end:

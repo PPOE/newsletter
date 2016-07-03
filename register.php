@@ -22,14 +22,13 @@ $w = isset($_POST['w']) ? $_POST['w'] : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $error = null;
 
-if (isset($_GET['dse']))
-{
-  $display = "#form_view {display:none;}\n#welcome_view {display:none;}";
-  goto end;
+if (isset($_GET['dse'])) {
+    $display = "#form_view {display:none;}\n#welcome_view {display:none;}";
+    goto end;
 }
 
-if ($submit != 'true'){
-  goto end;
+if ($submit != 'true') {
+    goto end;
 }
 
 if ($email === '') {
@@ -56,14 +55,12 @@ if ($vlbg === 'vlbg') {$prefs += 128;}
 if ($w === 'w') {$prefs += 256;}
 
 $id = $db->query("SELECT id FROM users WHERE email = '$email' LIMIT 1");
-if (count($id) > 0)
-{
+if (count($id) > 0) {
     $error = 'Diese E-Mail-Adresse ist bereits für den Newsletter-Empfang eingetragen!';
     goto end;
 }
 
-do
-{
+do {
     $sid = mt_rand();
 } while (count($db->query("SELECT * FROM users WHERE sid = $sid")) > 0);
 

@@ -51,8 +51,7 @@ function mail_utf8($db, $to, $subject, $message, $from, $unsubscribe_link = null
 
     $message .= $emailImpressum;
 
-if ($unsubscribe_link != null)
-{
+if ($unsubscribe_link != null) {
     $message .= '
 
 Einstellungen ändern bzw. Abmeldung vom Newsletter: ' . $unsubscribe_link;

@@ -10,8 +10,7 @@
                     <td>Optionen</td>
                 </tr>
                 <?php
-                foreach ($users as $user)
-                {
+                foreach ($users as $user) {
                 ?>
                 <tr>
                     <td>
