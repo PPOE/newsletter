@@ -1,5 +1,5 @@
             <footer>
                 <p>
-<?php echo $impressum; ?>
+                    <?php echo $impressum; ?>
                 </p>
             </footer>

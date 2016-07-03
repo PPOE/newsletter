@@ -1,52 +1,65 @@
 <?php
 
-function checklogin($access)
+/**
+ * @param int[] $access
+ * @return int
+ */
+function checklogin(array $access)
 {
-    if (in_array(2,$access))
+    if (in_array(2, $access, true))
         return 1;
-    if (in_array(38,$access))
+    if (in_array(38, $access, true))
         return 2;
-    if (in_array(40,$access))
+    if (in_array(40, $access, true))
         return 4;
-    if (in_array(39,$access))
+    if (in_array(39, $access, true))
         return 8;
-    if (in_array(41,$access))
+    if (in_array(41, $access, true))
         return 16;
-    if (in_array(42,$access))
+    if (in_array(42, $access, true))
         return 32;
-    if (in_array(43,$access))
+    if (in_array(43, $access, true))
         return 64;
-    if (in_array(45,$access))
+    if (in_array(45, $access, true))
         return 128;
-    if (in_array(37,$access))
+    if (in_array(37, $access, true))
         return 256;
     return 0;
 }
 
+/**
+ * @param int $prefs
+ * @return string[]
+ */
 function decodePrefs($prefs) {
-    $prefs = intval($prefs);
+    $prefs = (int) $prefs;
+    $pa = [];
     if ($prefs & 1)
-        $pa[] = "Bundesweite Informationen";
+        $pa[] = 'Bundesweite Informationen';
     if ($prefs & 2)
-        $pa[] = "Burgenland";
+        $pa[] = 'Burgenland';
     if ($prefs & 4)
-        $pa[] = "Kärnten";
+        $pa[] = 'Kärnten';
     if ($prefs & 8)
-        $pa[] = "Niederösterreich";
+        $pa[] = 'Niederösterreich';
     if ($prefs & 16)
-        $pa[] = "Oberösterreich";
+        $pa[] = 'Oberösterreich';
     if ($prefs & 32)
-        $pa[] = "Salzburg";
+        $pa[] = 'Salzburg';
     if ($prefs & 64)
-        $pa[] = "Steiermark";
+        $pa[] = 'Steiermark';
     if ($prefs & 128)
-        $pa[] = "Vorarlberg";
+        $pa[] = 'Vorarlberg';
     if ($prefs & 256)
-        $pa[] = "Wien";
+        $pa[] = 'Wien';
     return $pa;
 }
 
-function getAdminNames($admins) {
+/**
+ * @param array $admins
+ * @return array
+ */
+function getAdminNames(array $admins) {
     global $dbLang, $dbName;
     $db = new db($dbLang, $dbName);
     $admin_names = [];
@@ -55,7 +68,7 @@ function getAdminNames($admins) {
         if (preg_match('/^\d+$/', $admin) != 1)
             continue;
         $result = $db->query("SELECT usd_value FROM ppoe_mitglieder.adm_user_data WHERE usd_usf_id = 37 AND usd_usr_id = $admin");
-        if (count($result) != 1)
+        if (count($result) !== 1)
             $admin_names[] = $admin;
         else
             $admin_names[] = $result[0]['usd_value'];
@@ -64,7 +77,11 @@ function getAdminNames($admins) {
     return $admin_names;
 }
 
-function displayTemplate($name, $variables = []) {
+/**
+ * @param string $name
+ * @param array  $variables
+ */
+function displayTemplate($name, array $variables = []) {
     global $db;
     global $rights;
     global $impressum;
@@ -74,8 +91,8 @@ function displayTemplate($name, $variables = []) {
     }
 
     ob_start();
-    require 'templates/' . $name . '.php';
+    require_once('templates/' . $name . '.php');
     $pageContent = ob_get_clean();
 
-    require 'templates/layout/main.php';
+    require_once('templates/layout/main.php');
 }

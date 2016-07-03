@@ -1,25 +1,25 @@
 <?php
-require_once 'config.php';
-require_once 'functions.inc.php';
-require_once $databaseFile;
-require_once 'mail.inc.php';
+require_once('config.php');
+require_once('functions.inc.php');
+require_once($databaseFile);
+require_once('mail.inc.php');
 
 $db = new db($dbLang, $dbName);
 
 $rights = checklogin($access);
 $usr_id = -1;
 if ($gCurrentUser)
-  $usr_id = $gCurrentUser->getValue('usr_id');
+    $usr_id = $gCurrentUser->getValue('usr_id');
 
 $pref_id = 0;
 if (isset($_POST['pref_id'])) {
-	$pref_id = intval($_POST['pref_id']);
+    $pref_id = (int) $_POST['pref_id'];
 }
 
 $header_location = "Location: " . $baseUrl . "login.php";
 if (!$rights || ($rights != 1 && ($rights == 0 || ($pref_id != 0 && !($pref_id & $rights || -($pref_id) & $rights)))))
 {
-  header("$header_location");
+    header("$header_location");
 }
 
 $save = false;

@@ -7,11 +7,11 @@
 $databaseFile = 'db.inc.php';
 //$databaseFile = 'mockDb.inc.php'; // use with caution!
 
-$dbName = "newsletter";
-$dbLang = "pgsql";
+$dbName = 'newsletter';
+$dbLang = 'pgsql';
 
-$key = "password";
-$baseUrl = "https://initiative.piratenpartei.at/newsletter/";
+$key = 'password';
+$baseUrl = 'https://initiative.piratenpartei.at/newsletter/';
 
 $redmineBaseUrl = '';
 $redminapiKey = '';

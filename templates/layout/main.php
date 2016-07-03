@@ -8,9 +8,9 @@
         <meta name="author" content="Piratenpartei Österreichs">
 
         <!-- Le styles -->
-        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-        <link href="css/newsletter.css" rel="stylesheet">
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" />
+        <link href="css/newsletter.css" rel="stylesheet" />
 
         <style type="text/css">
             <?php echo $display; ?>
@@ -21,17 +21,16 @@
 
         <div class="container">
 
-<?php echo $pageContent; ?>
+            <?php echo $pageContent; ?>
 
-
-<?php require 'footer.php';  ?>
+            <?php require_once('footer.php'); ?>
 
         </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="js/jquery.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>

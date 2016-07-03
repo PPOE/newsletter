@@ -3,8 +3,8 @@
 //error_reporting(-1);
 //ini_set('display_errors', 'On');
 
-include_once 'config.php';
-include_once $databaseFile;
+require_once('config.php');
+require_once($databaseFile);
 
 $url = $redmineBaseUrl . 'issues.json';
 $url .= '?project_id=' . $projectId;
@@ -19,9 +19,9 @@ if ($contents === false) {
 $json = json_decode($contents);
 
 $db = new db($dbLang, $dbName);
-foreach($json->issues as $issue) {
+foreach ($json->issues as $issue) {
     if (strpos($issue->subject, 'Undelivered Mail Returned to Sender') !== false) {
-        preg_match("/[<<](\S+@\S+)[>>]/", $issue->description, $found);
+        preg_match('/[<<](\S+@\S+)[>>]/', $issue->description, $found);
         $email = $found[1];
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -34,22 +34,22 @@ foreach($json->issues as $issue) {
             $payload = "{\"issue\":{\"status_id\":5,\"notes\":\"automatisiert erledigt.\"}}";
 
             $curl = curl_init();
-            curl_setopt_array($curl, array(
+            curl_setopt_array($curl, [
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
+                CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "PUT",
+                CURLOPT_CUSTOMREQUEST => 'PUT',
                 CURLOPT_POSTFIELDS => $payload,
-                CURLOPT_HTTPHEADER => array(
-                    "cache-control: no-cache",
-                    "content-length: " . strlen($payload),
-                    "content-type: application/json",
-                    "x-redmine-api-key: " . $redminapiKey
-                ),
-            ));
+                CURLOPT_HTTPHEADER => [
+                    'cache-control: no-cache',
+                    'content-length: ' . strlen($payload),
+                    'content-type: application/json',
+                    'x-redmine-api-key: ' . $redminapiKey
+                ],
+            ]);
 
             $response = curl_exec($curl);
             $err = curl_error($curl);
@@ -57,7 +57,7 @@ foreach($json->issues as $issue) {
             curl_close($curl);
 
             /*if ($err) {
-                echo "cURL Error #:" . $err;
+                echo 'cURL Error #:' . $err;
             } else {
                 echo $response;
             }*/

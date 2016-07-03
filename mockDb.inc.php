@@ -1,6 +1,6 @@
 <?php
 
-require_once 'functions.inc.php';
+require_once('functions.inc.php');
 
 class db {
     private $dbConn_ = null;
@@ -14,34 +14,34 @@ class db {
         if (strpos(strtolower($query), 'select * from users') === 0) {
             return [
                 [
-                    'email' => 'fake@fake.fake',
-                    'prefs' => '1',
+                    'email'     => 'fake@fake.fake',
+                    'prefs'     => '1',
                     'confirmed' => '0',
                 ],
                 [
-                    'email' => 'fake2@fake.fake',
-                    'prefs' => '5',
+                    'email'     => 'fake2@fake.fake',
+                    'prefs'     => '5',
                     'confirmed' => '1',
                 ],
             ];
-        } else if (strpos(strtolower($query), 'select * from content') === 0) {
+        } elseif (strpos(strtolower($query), 'select * from content') === 0) {
             return [
                 [
-                    'id' => '1',
-                    'pref_id' => '1',
-                    'first_eyes_usr_id' => '',
+                    'id'                 => '1',
+                    'pref_id'            => '1',
+                    'first_eyes_usr_id'  => '',
                     'second_eyes_usr_id' => '',
-                    'content' => 'blub',
+                    'content'            => 'blub',
                 ],
                 [
-                    'id' => '2',
-                    'pref_id' => '4',
-                    'first_eyes_usr_id' => '',
+                    'id'                 => '2',
+                    'pref_id'            => '4',
+                    'first_eyes_usr_id'  => '',
                     'second_eyes_usr_id' => '',
-                    'content' => 'blub',
+                    'content'            => 'blub',
                 ],
             ];
-        } else if (strpos(strtolower($query), 'select usd_value from ppoe_mitglieder.adm_user_data') === 0) {
+        } elseif (strpos(strtolower($query), 'select usd_value from ppoe_mitglieder.adm_user_data') === 0) {
             return ['peter'];
         }
 
@@ -71,6 +71,6 @@ class User {
 }
 
 $gCurrentUser = new User();
-$roles = array(2,37,38,39,40,41,42,43,44,45);
+$roles = [2, 37, 38, 39, 40, 41, 42, 43, 44, 45];
 $access = [2];
 
