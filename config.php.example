@@ -11,7 +11,7 @@ $dbName = "newsletter";
 $dbLang = "pgsql";
 
 $key = "password";
-$baseUrl = "http://initiative.piratenpartei.at/newsletter/";
+$baseUrl = "https://initiative.piratenpartei.at/newsletter/";
 
 $redmineBaseUrl = '';
 $redminapiKey = '';

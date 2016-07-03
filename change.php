@@ -87,8 +87,8 @@ $display = "#change_view {display:none;}\n#delete_view {display:none;}";
 end:
 if ($sid != null)
 {
-	$prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
-	$prefs = $prefs[0]['prefs'];
+    $prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
+    $prefs = $prefs[0]['prefs'];
 }
 $db->close();
 

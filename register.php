@@ -66,7 +66,7 @@ do
 {
 $sid = mt_rand();
 } while (count($db->query("SELECT * FROM users WHERE sid = $sid")) > 0);
-  
+
 
 $db->query("INSERT INTO users (email, prefs, sid) VALUES ('$email', $prefs, $sid);");
 
