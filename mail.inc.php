@@ -1,6 +1,6 @@
 <?php
 
-require_once('config.php');
+require_once('config.inc.php');
 
 /**
  * @param int $n

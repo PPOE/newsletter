@@ -4,7 +4,7 @@ if (php_sapi_name() !== 'cli') { exit('error'); }
 global $mailqueue;
 $mailqueue = true;
 
-require_once('config.php');
+require_once('config.inc.php');
 require_once($databaseFile);
 require_once('mail.inc.php');
 

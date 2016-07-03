@@ -3,7 +3,7 @@
 //error_reporting(-1);
 //ini_set('display_errors', 'On');
 
-require_once('config.php');
+require_once('config.inc.php');
 require_once($databaseFile);
 
 $url = $redmineBaseUrl . 'issues.json';
