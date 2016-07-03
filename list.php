@@ -26,7 +26,11 @@ if (isset($_POST['delete'])) {
 if ($rights & 1) {
     $rights = 1;
 }
-$users = $db->query("SELECT * FROM users WHERE prefs & $rights;");
+if ($dbLang === 'pgsql') {
+    $users = $db->query("SELECT * FROM users WHERE Cast(prefs & $rights AS BOOLEAN);");
+} else if ($dbLang === 'mysql') {
+    $users = $db->query("SELECT * FROM users WHERE prefs & $rights;");
+}
 
 end:
 $db->close();
