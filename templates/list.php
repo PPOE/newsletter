@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="span12">
+    <div class="col-md-12">
         <div id="list_view" class="well">
             <h1>Teilnehmer-Liste</h1>
             <table class="table">

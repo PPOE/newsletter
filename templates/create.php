@@ -11,7 +11,7 @@
         if (isset($article['second_eyes_usr_id'])) {$admins[] = $article['second_eyes_usr_id'];}
         $admins = getAdminNames($admins);
         echo '
-        <div class="span12">
+        <div class="col-md-12">
           <div class="well">
             <h3>Betreff bearbeiten</h3>
             <div><form action="create.php" method="POST">
@@ -22,7 +22,7 @@
               <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
             </form></div>
           </div>
-        </div><!--/span-->
+        </div><!--/col-md--->
 ';
     }
     foreach ($articles as $article)
@@ -45,7 +45,7 @@
             $area_note = "<br />Beachte dass der Text die Zeichenfolge <code>%%LO CONTENT%%</code> enthalten muss. An dieser Stelle wird der LO-spezifische Inhalt eingefügt.";
         }
         echo '
-        <div class="span12">
+        <div class="col-md-12">
           <div class="well">
 	    '.$send_btn.'
             <h3>Text bearbeiten</h3>
@@ -59,7 +59,7 @@
               <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
             </form></div>
 	  </div>
-        </div><!--/span-->
+        </div><!--/col-md--->
 ';
     }
     ?>

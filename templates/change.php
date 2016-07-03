@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="span8">
+    <div class="col-md-8">
         <div id="delete_view" class="well">
             <h1>Abmeldung erfolgreich!</h1>
             <p>Ab sofort wurde der Versand von Newslettern an dich gestoppt und deine Daten unwiderbringlich gelöscht!</p>
@@ -9,7 +9,7 @@
         </div>
         <?php
         if($error != "") {
-            echo "<div class='alert alert-error'>".$error."</div>";
+            echo "<div class='alert alert-danger'>".$error."</div>";
         }
         ?>
         <div id="change_view" class="well">
@@ -41,5 +41,5 @@
             <button type="submit" class="btn btn-danger">Newsletter abbestellen</button>
             </form>
         </div>
-    </div><!--/span-->
+    </div><!--/col-md--->
 </div><!--/row-->

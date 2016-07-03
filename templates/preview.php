@@ -3,7 +3,7 @@
     if ($sendmails)
     {
         echo '
-        <div class="span12">
+        <div class="col-md-12">
           <div class="well">
             <h3 id="please_wait">Bitte warten...</h3>
               <p>
@@ -65,7 +65,7 @@
         echo '
             <script type="text/javascript">document.getElementById("please_wait").style.display="none";</script>
           </div>
-        </div><!--/span-->
+        </div><!--/col-md--->
 ';
         if (!$testmail)
         {
@@ -76,7 +76,7 @@
         }
         $db->close();
     }?>
-    <div class="span8">
+    <div class="col-md-8">
         <div class="well">
             <h1>Vorschau</h1>
             <p><form action="preview.php" method="POST">
@@ -95,7 +95,7 @@
             <p><?php echo "<pre>".$preview_text."</pre>";?></p>
         </div>
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <?php
         $article = $subject_r[0];
         $admins = "";
@@ -106,7 +106,7 @@
         $admins = getAdminNames($admins);
         if ($send) {$send_color = "alert-success";} else {$send_color = "alert-danger";}
         echo '
-            <div class="alert '.$send_color.'">
+            <div class="alert alert-warning '.$send_color.'">
               <p>Betreff '.$prefs[0].'</br>
               Versandfreigabe erfolgt durch: '.implode(", ", $admins).'</p>
             </div>
@@ -124,12 +124,12 @@
             $admins = getAdminNames($admins);
             if ($send) {$send_color = "alert-success";} else {$send_color = "alert-danger";}
             echo '
-            <div class="alert '.$send_color.'">
+            <div class="alert alert-warning '.$send_color.'">
               <p>Bereich: '.$prefs[0].'</br>
               Versandfreigabe erfolgt durch: '.implode(", ", $admins).'</p>
             </div>
 ';
         }
         ?>
-    </div><!--/span-->
+    </div><!--/col-md--->
 </div><!--/row-->

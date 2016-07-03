@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="span8">
+    <div class="col-md-8">
         <div id="dse_view" class="well">
             <h1>Datenschutzrichtlinien</h1>
             <p>
@@ -17,15 +17,15 @@
             <h1>Piraten-Newsletter</h1>
             <?php
             if ($error) {
-                echo "<div class='alert alert-error'>" . $error . "</div>";
+                echo "<div class='alert alert-danger'>" . $error . "</div>";
             }
             ?>
             <p>Hier kannst du dich zum Newsletter der Piratenpartei Österreichs schnell und einfach anmelden.<br>
                 Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="register.php?dse=1">Datenschutzrichtlinien</a></p>
             <form action="register.php" method="post">
                 <h4>Bitte trage hier deine E-Mail-Adresse ein:</h4>
-                <div class="input-prepend">
-                    <span class="add-on">@</span>
+                <div class="input-group">
+                    <div class="input-group-addon">@</div>
                     <input id="inputEmail" type="email" name="email" placeholder="E-Mail-Adresse" value="<?php echo $email; ?>">
                 </div>
                 <div>
@@ -46,5 +46,5 @@
             </form>
             <p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
         </div>
-    </div><!--/span-->
+    </div><!--/col-md--->
 </div><!--/row-->
