@@ -2,9 +2,9 @@
 if (php_sapi_name() != 'cli') { die('error'); }
 global $mailqueue;
 $mailqueue = true;
-require("config.php");
-require("db.php");
-require("mail.php");
+require_once 'config.php';
+require_once $databaseFile;
+require_once 'mail.inc.php';
 $work = 0;
 $db = new db($dbLang, $dbName);
 for ($i = 0; $i < 1; $i++)
@@ -54,4 +54,3 @@ for ($i = 0; $i < 1; $i++)
 $db->close();
 if ($work == 1)
 	echo "OK\n";
-?>

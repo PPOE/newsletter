@@ -1,8 +1,9 @@
 <?php
 $display = "#confirm_view {display:none;}";
-require("db.php");
-require("mail.php");
-require("config.php");
+require_once 'config.php';
+require_once 'functions.inc.php';
+require_once $databaseFile;
+require_once 'mail.inc.php';
 if(isset($_GET['s']) && preg_match('/^-?\d+$/', $_GET['s']) == 1 && isset($_GET['q'])) {
   $s = intval($_GET['s']);
   $q = $_GET['q'];
@@ -39,90 +40,11 @@ mail_utf8($db,$confirm, $email, "[Piraten-Newsletter] E-Mail-Adresse bestätigt"
 $db->close();
 $display = "#error_view {display:none;}";
 end:
-?>
 
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
-    <meta name="author" content="Piratenpartei Österreichs">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-	body {
-	background-color: #4c2582;
-        padding-top: 60px;
-        padding-bottom: 40px;
-        }
-	footer {
-	color: white;
-	}
-<?php echo $display;?>
-    </style>
+$templateVariables = [
+    'error' => $error,
+    'id' => $sid,
+];
 
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons
-    <link rel="shortcut icon" href="ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
-  </head>
-
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="span8">
-	  <div id="confirm_view" class="well">
-	    <h1>Du bist erfolgreich angemeldet!</h1>
-	    <p>Ab sofort erhältst du regelmäßig unseren personalisierten Newsletter. Viel Spa&szlig;!</p>
-	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verändern oder den Newsletter abbestellen:<br><a href="<?php echo change_link($sid);?>"><?php echo change_link($sid);?></a>
-	    <p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
-	  </div>
-	  <div id="error_view" class="well">
-	    <h1>Ein Fehler ist aufgetreten!</h1>
-<?php
-if($error != "") {
-  echo "<div class='alert alert-error'>".$error."</div>";
-}
-?>
-	    <p>Falls dieser Fehler wiederholt auftritt, wende dich an <a href="mailto:bgf@piratenpartei.at">bgf@piratenpartei.at</a>.</p>
-	  </div>
-        </div><!--/span-->
-      </div><!--/row-->
-
-      <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
-      </footer>
-
-    </div><!--/.fluid-container-->
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap-transition.js"></script>
-    <script src="js/bootstrap-alert.js"></script>
-    <script src="js/bootstrap-modal.js"></script>
-    <script src="js/bootstrap-dropdown.js"></script>
-    <script src="js/bootstrap-scrollspy.js"></script>
-    <script src="js/bootstrap-tab.js"></script>
-    <script src="js/bootstrap-tooltip.js"></script>
-    <script src="js/bootstrap-popover.js"></script>
-    <script src="js/bootstrap-button.js"></script>
-    <script src="js/bootstrap-collapse.js"></script>
-    <script src="js/bootstrap-carousel.js"></script>
-    <script src="js/bootstrap-typeahead.js"></script>
-  </body>
-</html>
-
+displayTemplate('confirm', $templateVariables);

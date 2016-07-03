@@ -17,9 +17,10 @@ $q_get = isset($_GET['q']) ? $_GET['q'] : '';
 
 $mailqueue = true;
 
-require("db.php");
-require("config.php");
-require("mail.php");
+require_once 'config.php';
+require_once 'functions.inc.php';
+require_once $databaseFile;
+require_once 'mail.inc.php';
 
 $db = new db($dbLang,$dbName);
 
@@ -90,116 +91,12 @@ if ($sid != null)
 	$prefs = $prefs[0]['prefs'];
 }
 $db->close();
-?>
 
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
-    <meta name="author" content="Piratenpartei Österreichs">
+$templateVariables = [
+    'error' => $error,
+    'id' => $sid,
+    'prefs' => $prefs
+];
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-	body {
-	background-color: #4c2582;
-        padding-top: 60px;
-        padding-bottom: 40px;
-        }
-	footer {
-	color: white;
-	}
-<?php echo $display;?>
-    </style>
-
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons
-    <link rel="shortcut icon" href="ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
-  </head>
-
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="span8">
-          <div id="delete_view" class="well">
-            <h1>Abmeldung erfolgreich!</h1>
-	    <p>Ab sofort wurde der Versand von Newslettern an dich gestoppt und deine Daten unwiderbringlich gelöscht!</p> 
-          </div>
-	  <div id="confirm_view" class="well">
-	    <h1>Deine Einstellungen wurden erfolgreich geändert!</h1>
-	  </div>
-<?php
-if($error != "") {
-  echo "<div class='alert alert-error'>".$error."</div>";
-}
-?>
-	  <div id="change_view" class="well">
-	    <h1>Newsletter-Einstellungen bearbeiten</h1>
-	    <p>Hier kannst du deine Newsletter-Einstellungen bearbeiten:</p>
-	    <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
-                <div>
-                  <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
-<?php
-echo '			<input type="hidden" name="bund" value="bund"/>';
-echo '                  <label class="checkbox"><input type="checkbox" name="" value="" checked="checked" disabled>Bundesweite Informationen</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="bgld" value="bgld" '.($prefs & 2 ? 'checked="checked"' : '').'>Burgenland</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="ktn" value="ktn" '.($prefs & 4 ? 'checked="checked"' : '').'>Kärnten</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="noe" value="noe" '.($prefs & 8 ? 'checked="checked"' : '').'>Niederösterreich</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="ooe" value="ooe" '.($prefs & 16 ? 'checked="checked"' : '').'>Oberösterreich</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="sbg" value="sbg" '.($prefs & 32 ? 'checked="checked"' : '').'>Salzburg</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="stmk" value="stmk" '.($prefs & 64 ? 'checked="checked"' : '').'>Steiermark</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg" '.($prefs & 128 ? 'checked="checked"' : '').'>Vorarlberg</label>';
-echo '                  <label class="checkbox"><input type="checkbox" name="w" value="w" '.($prefs & 256 ? 'checked="checked"' : '').'>Wien</label>';
-?>
-                </div>
-              <input type="hidden" name="submit" value="true" />
-              <button type="submit" class="btn">Absenden</button>
-            </form>
-	    <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
-              <h4>Willst du den Newsletter abbestellen?</h4>
-	      <input type="hidden" name="submit" value="true" />
-	      <input type="hidden" name="delete" value="true" />
-	      <button type="submit" class="btn btn-danger">Newsletter abbestellen</button>
-	    </form>
-	  </div>
-        </div><!--/span-->
-      </div><!--/row-->
-
-      <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
-      </footer>
-
-    </div><!--/.fluid-container-->
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap-transition.js"></script>
-    <script src="js/bootstrap-alert.js"></script>
-    <script src="js/bootstrap-modal.js"></script>
-    <script src="js/bootstrap-dropdown.js"></script>
-    <script src="js/bootstrap-scrollspy.js"></script>
-    <script src="js/bootstrap-tab.js"></script>
-    <script src="js/bootstrap-tooltip.js"></script>
-    <script src="js/bootstrap-popover.js"></script>
-    <script src="js/bootstrap-button.js"></script>
-    <script src="js/bootstrap-collapse.js"></script>
-    <script src="js/bootstrap-carousel.js"></script>
-    <script src="js/bootstrap-typeahead.js"></script>
-  </body>
-</html>
+displayTemplate('change', $templateVariables);
 

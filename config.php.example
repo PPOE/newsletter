@@ -1,11 +1,30 @@
 <?php
 
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+
+$databaseFile = 'db.inc.php';
+//$databaseFile = 'mockDb.inc.php'; // use with caution!
+
 $dbName = "newsletter";
 $dbLang = "pgsql";
+
 $key = "password";
 $baseUrl = "http://initiative.piratenpartei.at/newsletter/";
 
 $redmineBaseUrl = '';
 $redminapiKey = '';
-
 $projectId = 0;
+
+$impressum = '<a href="#">Impressum</a>';
+//todo: maybe move emailImpressum to template file.
+$emailImpressum = '
+
+--
+
+Piratenpartei Österreichs, Radetzkystraße 3/1, 8011 Graz
+
+Impressum: https://www.piratenpartei.at/rechtliches/impressum/
+
+Kontakt zum Bundesvorstand: bv@piratenpartei.at';

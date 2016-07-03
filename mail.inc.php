@@ -1,6 +1,6 @@
 <?php
 
-require("config.php");
+require_once 'config.php';
 
 function from_header($n)
 {
@@ -38,20 +38,15 @@ function base64_url_decode($input)
 
 function mail_utf8($db, $to, $subject, $message, $from, $unsubscribe_link = null)
 {
+    global $emailImpressum;
+
   $subject = "=?UTF-8?B?".base64_encode($subject)."?=";
 
   $headers = $from;
   $headers .= "MIME-Version: 1.0\r\nContent-type: text/plain; charset=UTF-8\r\n";
 
-  $message .= '
+  $message .= $emailImpressum;
 
---
-
-Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien
-
-Impressum: https://www.piratenpartei.at/rechtliches/impressum/
-
-Kontakt zur TF Newsletter (öffentlich!): tf-newsletter@forum.piratenpartei.at';
 if ($unsubscribe_link != null)
 {
   $message .= '
@@ -73,5 +68,3 @@ function change_link($sid,$page = 'change')
   $rand = mt_rand();
   return $baseUrl.$page.".php?s=" . $rand . "&q=" . base64_url_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key . $rand, $sid . '|' . $date->getTimestamp(), MCRYPT_MODE_CBC));
 }
-
-?>

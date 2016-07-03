@@ -2,9 +2,10 @@
 
 $mailqueue = true;
 
-require("config.php");
-require("db.php");
-require("mail.php");
+require 'config.php';
+require_once 'functions.inc.php';
+require $databaseFile;
+require 'mail.inc.php';
 
 $display = "#welcome_view {display:none;}\n#dse_view {display:none;}";
 
@@ -19,6 +20,7 @@ $stmk = isset($_POST['stmk']) ? $_POST['stmk'] : '';
 $vlbg = isset($_POST['vlbg']) ? $_POST['vlbg'] : '';
 $w = isset($_POST['w']) ? $_POST['w'] : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
+$error = null;
 
 if (isset($_GET['dse']))
 {
@@ -75,122 +77,11 @@ $db->close();
 
 $display = "#form_view {display:none;}\n#dse_view {display:none;}";
 end:
-?>
 
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
-    <meta name="author" content="Piratenpartei Österreichs">
+$templateVariables = [
+  'display' => $display,
+  'error' => $error,
+  'email' => $email
+];
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-	body {
-	background-color: #4c2582;
-        padding-top: 60px;
-        padding-bottom: 40px;
-        }
-	footer {
-	color: white;
-	}
-<?php echo $display;?>
-    </style>
-
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons
-    <link rel="shortcut icon" href="ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">-->
-  </head>
-
-  <body>
-
-    <div class="container">
-      <div class="row">
-        <div class="span8">
-          <div id="dse_view" class="well">
-            <h1>Datenschutzrichtlinien</h1>
-            <p>
-Nach Anmeldung wird die E-Mail-Adresse des Beziehers von der Piratenpartei &Ouml;sterreichs als Auftraggeber verarbeitet (gespeichert und f&uuml;r Zwecke der Versendung ben&uuml;tzt). Es werden keinerlei Daten zum &Uuml;bermittlungsvorgang (Zustell- oder Lesebest&auml;tigungen) ermittelt. Nach Abmeldung vom Bezug werden die Daten aus dieser Datenanwendung gel&ouml;scht. Eine &Uuml;bermittlung dieser Daten ist nicht vorgesehen. Die Datenanwendung f&uuml;r Zwecke dieses Newsletters (einschlie&szlig;lich der zur Verbreitung ben&uuml;tzten Mailserver) wird auf EDV-Anlagen der Piratenpartei &Ouml;sterreichs gehostet.
-            </p>
-            <p>
-              <a href="register.php">Zur&uuml;ck</a>
-            </p>
-          </div>
-	  <div id="welcome_view" class="well">
-	    <h1>Danke für deine Anmeldung!</h1>
-	    <p>An die von dir eingebene E-Mail-Adresse wird in Kürze eine Bestätigungsmail versendet.</p>
-	  </div>
-	  <div id="form_view" class="well">
-	    <h1>Piraten-Newsletter</h1>
-<?php
-if($error != "") {
-  echo "<div class='alert alert-error'>".$error."</div>";
-}
-?>
-	    <p>Hier kannst du dich zum Newsletter der Piratenpartei Österreichs schnell und einfach anmelden.<br>
-	    Unsere aktuellen Datenschutzrichtlinien findest du hier: <a href="register.php?dse=1">Datenschutzrichtlinien</a></p>
-	    <form action="register.php" method="post">
-		<h4>Bitte trage hier deine E-Mail-Adresse ein:<?php echo $validemail;?></h4>
-		<div class="input-prepend">
-		  <span class="add-on">@</span>
-		  <input id="inputEmail" type="text" name="email" placeholder="E-Mail-Adresse" value="<?php echo $email; ?>">
-		</div>
-		<div>
-		  <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
-		  <input type="hidden" name="bund" value="bund" />
-		  <label class="checkbox"><input type="checkbox" name="" value="" checked="checked" disabled>Bundesweite Informationen</label>
-		  <label class="checkbox"><input type="checkbox" name="bgld" value="bgld">Burgenland</label>
-		  <label class="checkbox"><input type="checkbox" name="ktn" value="ktn">Kärnten</label>
-		  <label class="checkbox"><input type="checkbox" name="noe" value="noe">Niederösterreich</label>
-		  <label class="checkbox"><input type="checkbox" name="ooe" value="ooe">Oberösterreich</label>
-		  <label class="checkbox"><input type="checkbox" name="sbg" value="sbg">Salzburg</label>
-		  <label class="checkbox"><input type="checkbox" name="stmk" value="stmk">Steiermark</label>
-		  <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg">Vorarlberg</label>
-		  <label class="checkbox"><input type="checkbox" name="w" value="w">Wien</label>
-		</div>
-              <input type="hidden" name="submit" value="true" />
-	      <button type="submit" class="btn">Absenden</button>
-	    </form>
-			<p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
-	  </div>
-        </div><!--/span-->
-      </div><!--/row-->
-
-      <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
-      </footer>
-
-    </div><!--/.fluid-container-->
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap-transition.js"></script>
-    <script src="js/bootstrap-alert.js"></script>
-    <script src="js/bootstrap-modal.js"></script>
-    <script src="js/bootstrap-dropdown.js"></script>
-    <script src="js/bootstrap-scrollspy.js"></script>
-    <script src="js/bootstrap-tab.js"></script>
-    <script src="js/bootstrap-tooltip.js"></script>
-    <script src="js/bootstrap-popover.js"></script>
-    <script src="js/bootstrap-button.js"></script>
-    <script src="js/bootstrap-collapse.js"></script>
-    <script src="js/bootstrap-carousel.js"></script>
-    <script src="js/bootstrap-typeahead.js"></script>
-  </body>
-</html>
-
+displayTemplate('register', $templateVariables);
