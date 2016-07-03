@@ -61,7 +61,7 @@ function decodePrefs($prefs) {
  */
 function getAdminNames(array $admins) {
     global $dbLang, $dbName;
-    $db = new db($dbLang, $dbName);
+    $db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
     $admin_names = [];
     foreach ($admins as $admin) {
         if (preg_match('/^\d+$/', $admin) != 1) {

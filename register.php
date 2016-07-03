@@ -41,7 +41,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     goto end;
 }
 
-$db = new db($dbLang, $dbName);
+$db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
 
 $prefs = 1;
 //if ($bund === 'bund') {$prefs += 1;}

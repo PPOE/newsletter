@@ -74,6 +74,7 @@ Vagrant.configure(2) do |config|
     sudo rm -r /var/www/html/index.html
 
     cd /var/www/html/
+    #git clone https://github.com/PPOE/admidio-old.git
     git clone https://github.com/PPOE/admidio.git
 
     sudo ln -s /vagrant/ /var/www/html/admidio/newsletter

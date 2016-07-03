@@ -18,7 +18,7 @@ if ($contents === false) {
 }
 $json = json_decode($contents);
 
-$db = new db($dbLang, $dbName);
+$db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
 foreach ($json->issues as $issue) {
     if (strpos($issue->subject, 'Undelivered Mail Returned to Sender') !== false) {
         preg_match('/[<<](\S+@\S+)[>>]/', $issue->description, $found);

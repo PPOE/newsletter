@@ -4,8 +4,12 @@ $basepath = dirname(dirname($_SERVER['SCRIPT_FILENAME'])).DIRECTORY_SEPARATOR;
 
 require_once('functions.inc.php');
 require_once($basepath . 'adm_program/system/common.php');
-require_once($basepath . 'adm_program/system/classes/list_configuration.php');
-require_once($basepath . 'adm_program/system/classes/table_roles.php');
+// old admidio
+//require_once($basepath . 'adm_program/system/classes/list_configuration.php');
+//require_once($basepath . 'adm_program/system/classes/table_roles.php');
+// new admidio
+require_once($basepath . 'adm_program/system/classes/listconfiguration.php');
+require_once($basepath . 'adm_program/system/classes/tableroles.php');
 
 global $mailqueue;
 global $gDb;
@@ -49,8 +53,10 @@ if (!isset($mailqueue) || !$mailqueue) {
         $access = [2];
     }
     //Verwaltung der Session
-    $_SESSION['navigation']->clear();
-    $_SESSION['navigation']->addUrl(CURRENT_URL);
+    if (isset($_SESSION['navigation'])) {
+        $_SESSION['navigation']->clear();
+        $_SESSION['navigation']->addUrl(CURRENT_URL);
+    }
 }
 
 class db
@@ -58,7 +64,7 @@ class db
     private $dbConn_ = null;
     public $dbType_ = null;
 
-    public function __construct($dbType, $name, $host = null)
+    public function __construct($dbType, $name, $host, $user, $password)
     {
         $this->dbType_ = $dbType;
         switch ($this->dbType_) {
@@ -72,7 +78,7 @@ class db
                 mysql_select_db($name, $this->dbConn_);
                 break;
             case 'pgsql':
-                $this->dbConn_ = pg_connect("dbname=$name")
+                $this->dbConn_ = pg_connect("host=$host dbname=$name user=$user password=$password")
                 or exit('Could not connect: ' . pg_last_error());
                 break;
             default:

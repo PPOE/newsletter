@@ -20,7 +20,7 @@ if (count($q_array) <= 1 || preg_match('/^-?\d+$/', $q_array[0]) != 1) {
 
 $sid = $q_array[0];
 
-$db = new db($dbLang, $dbName);
+$db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
 
 $confirmed = $db->query("SELECT confirmed FROM users WHERE sid = '$sid' LIMIT 1");
 if ($confirmed[0]['confirmed'] != 0 && $confirmed[0]['confirmed'] != 'f') {

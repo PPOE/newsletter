@@ -22,7 +22,7 @@ require_once('functions.inc.php');
 require_once($databaseFile);
 require_once('mail.inc.php');
 
-$db = new db($dbLang,$dbName);
+$db = new db($dbLang,$dbName, $dbHost, $dbUser, $dbPass);
 
 if (isset($_GET['s']) && preg_match('/^-?\d+$/', $_GET['s']) == 1 && isset($_GET['q'])) {
     $s = (int) $_GET['s'];

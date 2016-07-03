@@ -7,7 +7,7 @@
                 <h3 id="please_wait">Bitte warten...</h3>
                   <p>
         ';
-        $db = new db($dbLang, $dbName);
+        $db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
         if (!$testmail) {
             if ($rights == 1) {
                 $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL;");

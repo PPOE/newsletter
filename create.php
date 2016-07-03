@@ -4,7 +4,7 @@ require_once('functions.inc.php');
 require_once($databaseFile);
 require_once('mail.inc.php');
 
-$db = new db($dbLang, $dbName);
+$db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
 
 $rights = checklogin($access);
 $usr_id = -1;

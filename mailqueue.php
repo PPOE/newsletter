@@ -9,7 +9,7 @@ require_once($databaseFile);
 require_once('mail.inc.php');
 
 $work = 0;
-$db = new db($dbLang, $dbName);
+$db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
 for ($i = 0; $i < 1; $i++) {
     $results = $db->query("SELECT * FROM mail_queue ORDER BY mid ASC LIMIT 10;");
     foreach ($results as $result) {
@@ -26,7 +26,7 @@ for ($i = 0; $i < 1; $i++) {
 $db->close();
 $dbUser = $db2User;
 $dbPass = $db2Pass;
-$db = new db($db2Lang, $db2Name);
+$db = new db($db2Lang, $db2Name, $dbHost, $dbUser, $dbPass);
 for ($i = 0; $i < 1; $i++) {
     $results = $db->query("SELECT * FROM adm_mail_queue ORDER BY mid ASC LIMIT 10;");
     foreach ($results as $result) {

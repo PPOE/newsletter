@@ -4,7 +4,7 @@ require_once('functions.inc.php');
 require_once($databaseFile);
 
 
-$db = new db($dbLang, $dbName);
+$db = new db($dbLang, $dbName, $dbHost, $dbUser, $dbPass);
 
 $header_location = 'Location: ' . $baseUrl . 'login.php';
 $rights = checklogin($access);
