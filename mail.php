@@ -47,9 +47,9 @@ function mail_utf8($db, $to, $subject, $message, $from, $unsubscribe_link = null
 
 --
 
-Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien
+Piratenpartei Österreichs
 
-Impressum: https://www.piratenpartei.at/rechtliches/impressum/
+<a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">Impressum</a>
 
 Kontakt zur TF Newsletter (öffentlich!): tf-newsletter@forum.piratenpartei.at';
 if ($unsubscribe_link != null)
