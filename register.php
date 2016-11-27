@@ -170,7 +170,7 @@ if($error != "") {
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
+       <a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">Piratenpartei Österreichs - Impressum</a>
       </footer>
 
     </div><!--/.fluid-container-->
