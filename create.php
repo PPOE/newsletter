@@ -62,7 +62,7 @@ end:
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <title>Piraten-Newsletter</title>
+    <title>Piraten Newsletter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
     <meta name="author" content="Piratenpartei Österreichs">
@@ -166,7 +166,7 @@ echo '
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
+       <a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">Piratenpartei Österreichs - Impressum</a>
       </footer>
 
     </div><!--/.fluid-container-->
