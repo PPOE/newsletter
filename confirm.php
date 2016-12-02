@@ -1,8 +1,8 @@
 <?php
 $display = "#confirm_view {display:none;}";
-require("db.php");
-require("mail.php");
-require("config.php");
+require_once('config.php');
+require_once('db.php');
+require_once('mail.php');
 if(isset($_GET['s']) && preg_match('/^-?\d+$/', $_GET['s']) == 1 && isset($_GET['q'])) {
   $s = intval($_GET['s']);
   $q = $_GET['q'];
@@ -53,23 +53,18 @@ end:
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
-	body {
-	background-color: #4c2582;
+    body {
+    background-color: #4c2582;
         padding-top: 60px;
         padding-bottom: 40px;
         }
-	footer {
-	color: white;
-	}
+    footer {
+    color: white;
+    }
 <?php echo $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- Fav and touch icons
     <link rel="shortcut icon" href="ico/favicon.ico">
@@ -96,8 +91,8 @@ if($error != "") {
   echo "<div class='alert alert-error'>".$error."</div>";
 }
 ?>
-	    <p>Falls dieser Fehler wiederholt auftritt, wende dich an <a href="mailto:bgf@piratenpartei.at">bgf@piratenpartei.at</a>.</p>
-	  </div>
+        <p>Falls dieser Fehler wiederholt auftritt, wende dich an <a href="mailto:bgf@piratenpartei.at">bgf@piratenpartei.at</a>.</p>
+      </div>
         </div><!--/span-->
       </div><!--/row-->
 

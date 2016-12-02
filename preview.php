@@ -1,7 +1,7 @@
 <?php
-require("config.php");
-require("db.php");
-require("mail.php");
+require_once('config.php');
+require_once('db.php');
+require_once('mail.php');
 
 $db = new db($dbLang, $dbName);
 
@@ -97,22 +97,17 @@ end:
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
-	body {
-	background-color: #4c2582;
+    body {
+    background-color: #4c2582;
         padding-top: 60px;
         padding-bottom: 40px;
         }
-	footer {
-	color: white;
-	}
+    footer {
+    color: white;
+    }
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- Fav and touch icons
     <link rel="shortcut icon" href="ico/favicon.ico">
@@ -151,36 +146,36 @@ foreach ($users as $user)
     if ($rights != 1)
     {
         $user_mailtext = stripslashes($sendbo[0]['content']);
-	$lo_real_id = $sendbo[0]['pref_id'];
+    $lo_real_id = $sendbo[0]['pref_id'];
     }
     else
     {
         $lo_mailtext = '';
         foreach ($sendlos as $sendlo)
         {
-	      $lo = decodePrefs($sendlo['pref_id']);
-	      $pre = "--------------- Information der LO " . $lo[0] . " "; 
-	      $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
-	      $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
-	      if (strlen(stripslashes($article['content'])) > 10 && intval($sendlo['pref_id']) & intval($user['prefs']))
+          $lo = decodePrefs($sendlo['pref_id']);
+          $pre = "--------------- Information der LO " . $lo[0] . " ";
+          $pre .= str_repeat("-", 72 - strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8'))) . "\n";
+          $post = "\n" . str_repeat("-", strlen(mb_convert_encoding($pre,'ISO-8859-15','UTF-8')) - 1) . "\n";
+          if (strlen(stripslashes($article['content'])) > 10 && intval($sendlo['pref_id']) & intval($user['prefs']))
                         $lo_mailtext .= $pre . stripslashes($sendlo['content']) . $post;
         }
 
         $user_mailtext = str_replace('%%LO CONTENT%%',$lo_mailtext,$mailtext);
-	$lo_real_id = 1;
+    $lo_real_id = 1;
     }
 
         mail_utf8($db,$user['email'], "$subject", $user_mailtext, from_header($lo_real_id), change_link($user['sid']));
-	
-	if ($testmail)
-	{
-		echo '<p>Versand an ' . $user['email'] . " erfolgt.</p>\n";
-	}
-	
+
+    if ($testmail)
+    {
+        echo '<p>Versand an ' . $user['email'] . " erfolgt.</p>\n";
+    }
+
         $i++;
         if ($i % ($user_count / $nth) == 0) {
           echo $i . " / " . $user_count . "<br />";
-	}
+    }
 }
 echo '
               </p>
@@ -203,25 +198,25 @@ else
 }
 $db->close();
 }?>
-	<div class="span8">
-	  <div class="well">
-	    <h1>Vorschau</h1>
-	    <p><form action="preview.php" method="POST">
+    <div class="span8">
+      <div class="well">
+        <h1>Vorschau</h1>
+        <p><form action="preview.php" method="POST">
 <?php
 if ($may_send_mails)
 echo '
-	      <input type="hidden" name="sendmails" value="true" />
-	      <input type="submit" class="btn btn-success" value="Newsletter aussenden" />
+          <input type="hidden" name="sendmails" value="true" />
+          <input type="submit" class="btn btn-success" value="Newsletter aussenden" />
 ';
 ?>
-	      <a class="btn" href="create.php">Newsletter bearbeiten</a>
+          <a class="btn" href="create.php">Newsletter bearbeiten</a>
               <textarea style="width:180px;" rows="1" name="testmail"></textarea>
               <input type="submit" class="btn btn-success" name="test" value="Test an diese Mailadresse aussenden" />
               </form></p>
-	    <p>Betreff: <?php echo $subject;?></p>
-	    <p><?php echo "<pre>".$preview_text."</pre>";?></p>
-	  </div>
-	</div>
+        <p>Betreff: <?php echo $subject;?></p>
+        <p><?php echo "<pre>".$preview_text."</pre>";?></p>
+      </div>
+    </div>
         <div class="span4">
 <?php
 $article = $subject_r[0];
@@ -258,7 +253,7 @@ echo '
 ';
 }
 ?>
-	  </div>
+      </div>
         </div><!--/span-->
       </div><!--/row-->
 

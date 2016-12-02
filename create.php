@@ -1,7 +1,7 @@
 <?php
-require("config.php");
-require("db.php");
-require("mail.php");
+require_once('config.php');
+require_once('db.php');
+require_once('mail.php');
 
 $db = new db($dbLang, $dbName);
 
@@ -17,38 +17,38 @@ if (!$rights || ($rights != 1 && ($rights == 0 || ($pref_id != 0 && !($pref_id &
 }
 if (isset($_POST['save']))
 {
-	$save = true;
-	$db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
+    $save = true;
+    $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
 }
 if (isset($_POST['publish']))
 {
-	$publish = true;
+    $publish = true;
 }
 if ($save)
 {
-	$content = $db->escape($_POST['content']);
+    $content = $db->escape($_POST['content']);
         if ($pref_id == 1 && preg_match('/%%LO CONTENT%%/s',$content) != 1)
         {
           $publish = false;
         }
         $db->query("UPDATE content SET first_eyes_usr_id = NULL, second_eyes_usr_id = NULL WHERE pref_id = $pref_id");
-	$db->query("UPDATE content SET content = $content WHERE pref_id = $pref_id");
+    $db->query("UPDATE content SET content = $content WHERE pref_id = $pref_id");
 }
 if ($publish)
 {
-	$eyes_usr_id = $db->query("SELECT first_eyes_usr_id, second_eyes_usr_id FROM content WHERE pref_id = $pref_id");
-	if ((preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) == 1 && $eyes_usr_id[0]['first_eyes_usr_id'] == $usr_id) ||
+    $eyes_usr_id = $db->query("SELECT first_eyes_usr_id, second_eyes_usr_id FROM content WHERE pref_id = $pref_id");
+    if ((preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) == 1 && $eyes_usr_id[0]['first_eyes_usr_id'] == $usr_id) ||
             (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) == 1 && $eyes_usr_id[0]['second_eyes_usr_id'] == $usr_id)) {}
-	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) != 1) {$db->query("UPDATE content SET first_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
-	elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) != 1) {$db->query("UPDATE content SET second_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
+    elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['first_eyes_usr_id']) != 1) {$db->query("UPDATE content SET first_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
+    elseif (preg_match('/^\d+$/', $eyes_usr_id[0]['second_eyes_usr_id']) != 1) {$db->query("UPDATE content SET second_eyes_usr_id = $usr_id WHERE pref_id = $pref_id");}
         else { }
 
-	$sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = 1;");
+    $sendbo = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = 1;");
         $sendsubject = $db->query("SELECT * FROM content WHERE first_eyes_usr_id IS NOT NULL AND second_eyes_usr_id IS NOT NULL AND pref_id = -1;");
-	if (count($sendbo) == 1 && count($sendsubject) == 1)
-	{
-		$sendmails = true;
-	}
+    if (count($sendbo) == 1 && count($sendsubject) == 1)
+    {
+        $sendmails = true;
+    }
 }
 
 $articles = $db->query("SELECT * FROM content WHERE NOT sent ORDER BY pref_id");
@@ -70,22 +70,17 @@ end:
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
-	body {
-	background-color: #4c2582;
+    body {
+    background-color: #4c2582;
         padding-top: 60px;
         padding-bottom: 40px;
         }
-	footer {
-	color: white;
-	}
+    footer {
+    color: white;
+    }
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- Fav and touch icons
     <link rel="shortcut icon" href="ico/favicon.ico">
@@ -147,10 +142,10 @@ if ($article['pref_id'] == 1)
 echo '
         <div class="span12">
           <div class="well">
-	    '.$send_btn.'
+        '.$send_btn.'
             <h3>Text bearbeiten</h3>
             <div><form action="create.php" method="POST">
-	      <input type="hidden" name="pref_id" value="'.$article['pref_id'].'" />
+          <input type="hidden" name="pref_id" value="'.$article['pref_id'].'" />
               <input type="hidden" name="id" value="'.$article['id'].'" />
               <p>Bereich: '.$prefs[0].$area_note.'</p>
               <textarea style="width:60%;" rows="5" name="content" onclick="document.getElementById(\'publish'.$article['pref_id'].'\').style.display=\'none\';">'.stripslashes($article['content']).'</textarea><br />
@@ -158,7 +153,7 @@ echo '
               <input type="submit" class="btn" id="publish'.$article['pref_id'].'" name="publish" value="Versandfreigabe (ohne Speichern)" />
               <p>Versandfreigabe erfolgt durch (2 Personen): '.implode(", ", $admins).'</p>
             </form></div>
-	  </div>
+      </div>
         </div><!--/span-->
 ';
 }

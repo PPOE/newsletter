@@ -17,9 +17,9 @@ $q_get = isset($_GET['q']) ? $_GET['q'] : '';
 
 $mailqueue = true;
 
-require("db.php");
-require("config.php");
-require("mail.php");
+require_once('config.php');
+require_once('db.php');
+require_once('mail.php');
 
 $db = new db($dbLang,$dbName);
 
@@ -86,8 +86,8 @@ $display = "#change_view {display:none;}\n#delete_view {display:none;}";
 end:
 if ($sid != null)
 {
-	$prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
-	$prefs = $prefs[0]['prefs'];
+    $prefs = $db->query("SELECT prefs FROM users WHERE sid = $sid;");
+    $prefs = $prefs[0]['prefs'];
 }
 $db->close();
 ?>
@@ -104,23 +104,18 @@ $db->close();
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
-	body {
-	background-color: #4c2582;
+    body {
+    background-color: #4c2582;
         padding-top: 60px;
         padding-bottom: 40px;
         }
-	footer {
-	color: white;
-	}
+    footer {
+    color: white;
+    }
 <?php echo $display;?>
     </style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- Fav and touch icons
     <link rel="shortcut icon" href="ico/favicon.ico">
@@ -136,24 +131,24 @@ $db->close();
         <div class="span8">
           <div id="delete_view" class="well">
             <h1>Abmeldung erfolgreich!</h1>
-	    <p>Ab sofort wurde der Versand von Newslettern an dich gestoppt und deine Daten unwiderbringlich gelöscht!</p> 
+        <p>Ab sofort wurde der Versand von Newslettern an dich gestoppt und deine Daten unwiderbringlich gelöscht!</p> 
           </div>
-	  <div id="confirm_view" class="well">
-	    <h1>Deine Einstellungen wurden erfolgreich geändert!</h1>
-	  </div>
+      <div id="confirm_view" class="well">
+        <h1>Deine Einstellungen wurden erfolgreich geändert!</h1>
+      </div>
 <?php
 if($error != "") {
   echo "<div class='alert alert-error'>".$error."</div>";
 }
 ?>
-	  <div id="change_view" class="well">
-	    <h1>Newsletter-Einstellungen bearbeiten</h1>
-	    <p>Hier kannst du deine Newsletter-Einstellungen bearbeiten:</p>
-	    <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
+      <div id="change_view" class="well">
+        <h1>Newsletter-Einstellungen bearbeiten</h1>
+        <p>Hier kannst du deine Newsletter-Einstellungen bearbeiten:</p>
+        <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
                 <div>
                   <h4>Für welche Teile des Newsletters willst du dich registieren?</h4>
 <?php
-echo '			<input type="hidden" name="bund" value="bund"/>';
+echo '            <input type="hidden" name="bund" value="bund"/>';
 echo '                  <label class="checkbox"><input type="checkbox" name="" value="" checked="checked" disabled>Bundesweite Informationen</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="bgld" value="bgld" '.($prefs & 2 ? 'checked="checked"' : '').'>Burgenland</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="ktn" value="ktn" '.($prefs & 4 ? 'checked="checked"' : '').'>Kärnten</label>';
@@ -168,13 +163,13 @@ echo '                  <label class="checkbox"><input type="checkbox" name="w" 
               <input type="hidden" name="submit" value="true" />
               <button type="submit" class="btn">Absenden</button>
             </form>
-	    <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
+        <?php echo "<form action=\"".change_link($sid)."\" method=\"post\">";?>
               <h4>Willst du den Newsletter abbestellen?</h4>
-	      <input type="hidden" name="submit" value="true" />
-	      <input type="hidden" name="delete" value="true" />
-	      <button type="submit" class="btn btn-danger">Newsletter abbestellen</button>
-	    </form>
-	  </div>
+          <input type="hidden" name="submit" value="true" />
+          <input type="hidden" name="delete" value="true" />
+          <button type="submit" class="btn btn-danger">Newsletter abbestellen</button>
+        </form>
+      </div>
         </div><!--/span-->
       </div><!--/row-->
 

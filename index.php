@@ -1,5 +1,4 @@
 <?php
-//include_once('bounces.php');
+//require_once('bounces.php');
 
-header("Location: register.php");
-?>
+header('Location: register.php');
