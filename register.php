@@ -164,13 +164,13 @@ if($error != "") {
               <input type="hidden" name="submit" value="true" />
 	      <button type="submit" class="btn">Absenden</button>
 	    </form>
-			<p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
+			<p><a href="https://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
 	  </div>
         </div><!--/span-->
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
+        <p>Piratenpartei Österreichs, Radetzkystra�^�e 3/1, 8011 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->

@@ -47,7 +47,7 @@ function mail_utf8($db, $to, $subject, $message, $from, $unsubscribe_link = null
 
 --
 
-Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien
+Piratenpartei Österreichs, Radetzkystraße 3/1, 8011 Graz
 
 Impressum: https://www.piratenpartei.at/rechtliches/impressum/
 

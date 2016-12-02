@@ -87,7 +87,7 @@ end:
 	    <h1>Du bist erfolgreich angemeldet!</h1>
 	    <p>Ab sofort erhältst du regelmäßig unseren personalisierten Newsletter. Viel Spa&szlig;!</p>
 	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verändern oder den Newsletter abbestellen:<br><a href="<?php echo change_link($sid);?>"><?php echo change_link($sid);?></a>
-	    <p><a href="http://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
+	    <p><a href="https://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
 	  </div>
 	  <div id="error_view" class="well">
 	    <h1>Ein Fehler ist aufgetreten!</h1>
@@ -102,7 +102,7 @@ if($error != "") {
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
+        <p>Piratenpartei Österreichs, Radetzkystraße 3/1, 8011 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->

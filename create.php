@@ -166,7 +166,7 @@ echo '
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien</p>
+        <p>Piratenpartei Österreichs, Radetzkystraße 3/1, 8011 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->
