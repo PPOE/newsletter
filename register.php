@@ -165,7 +165,7 @@ if($error != "") {
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Radetzkystra�^�e 3/1, 8011 Graz</p>
+        <p>Piratenpartei Österreichs, Radetzkystraße 3/1, 8011 Graz</p>
       </footer>
 
     </div><!--/.fluid-container-->
