@@ -174,7 +174,7 @@ echo '                  <label class="checkbox"><input type="checkbox" name="w" 
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Radetzkystraße 3/1, 8011 Graz</p>
+          <p><a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">Impressum</a></p>
       </footer>
 
     </div><!--/.fluid-container-->
