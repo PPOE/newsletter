@@ -165,7 +165,7 @@ if($error != "") {
       </div><!--/row-->
 
       <footer>
-        <p><a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">Piratenpartei Österreichs, Scheuchenstuelgasse 11, 6020 Innsbruck</a></p>
+        <p><a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">Impressum</a></p>
       </footer>
 
     </div><!--/.fluid-container-->
