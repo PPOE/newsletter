@@ -87,7 +87,7 @@ foreach ($users as $user)
       </div><!--/row-->
 
       <footer>
-        <p>Piratenpartei Österreichs, Hubertusstraße 21, 8042 Graz</p>
+        <p><a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">Impressum</a></p>
       </footer>
 
     </div><!--/.fluid-container-->
