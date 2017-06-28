@@ -133,6 +133,7 @@ $db->query("UPDATE presse_content SET first_eyes_usr_id = NULL, second_eyes_usr_
 $user_count = count($users);
 $nth = 10;
 $lo_real_id = 1;
+$i = 0;
 foreach ($users as $user)
 {
     $user_mailtext = stripslashes($sendbo[0]['content']);

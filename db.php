@@ -144,7 +144,7 @@ public function escape($text)
   switch ($this->dbType_)
   {
     case 'mysql':
-      return "'".mysql_escape_string($text)."'";
+      return "'".mysql_real_escape_string($text)."'";
     case 'pgsql':
       return pg_escape_literal($text);
     default:
