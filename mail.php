@@ -47,9 +47,9 @@ function mail_utf8($db, $to, $subject, $message, $from, $unsubscribe_link = null
 
 --
 
-Piratenpartei Österreichs, Radetzkystraße 3/1, 8011 Graz
+Piratenpartei Österreichs
 
-Impressum: https://www.piratenpartei.at/rechtliches/impressum/
+Impressum: https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum
 
 Kontakt zur TF Newsletter (öffentlich!): tf-newsletter@forum.piratenpartei.at';
 if ($unsubscribe_link != null)
