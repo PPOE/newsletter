@@ -42,10 +42,10 @@ $impressum = '
 
 --
 
-Piratenpartei Österreichs, Schadinagasse 3, 1170 Wien
+Piratenpartei Österreichs
 
-Impressum: https://www.piratenpartei.at/rechtliches/impressum/';
-$htmlimpressum = 'Impressum: <a href=3D"https://www.piratenpartei.at/rechtliches/impressum/">https://www.piratenpartei.at/rechtliches/impressum/</a>';
+Impressum: https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum';
+$htmlimpressum = 'Impressum: <a href="https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum">https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum</a>';
 $unsubscribe = '';
 $htmlunsubscribe = '';
 if ($unsubscribe_link != null)
@@ -66,7 +66,7 @@ Mit einem Klick auf den folgenden Link koennen Sie auswaehlen welche Presseinfor
     $message = substr($message,strpos($message,"\n"),-1);
     $message = str_replace("<IMPRESSUM>",'
 
-Impressum: https://www.piratenpartei.at/rechtliches/impressum/
+Impressum: https://wiki.piratenpartei.at/wiki/Piratenwiki:Impressum
 ',$message);
     $message = str_replace("<HTMLIMPRESSUM>",$htmlimpressum,$message);
     $message = str_replace("<UNSUBSCRIBE>",$unsubscribe,$message);
