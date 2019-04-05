@@ -8,16 +8,18 @@ require_once('mail.php');
 
 $display = "#welcome_view {display:none;}\n#dse_view {display:none;}";
 
-$email = isset($_POST['email']) ? $_POST['email'] : '';
-$bund = isset($_POST['bund']) ? $_POST['bund'] : '';
-$bgld = isset($_POST['bgld']) ? $_POST['bgld'] : '';
-$ktn = isset($_POST['ktn']) ? $_POST['ktn'] : '';
-$noe = isset($_POST['noe']) ? $_POST['noe'] : '';
-$ooe = isset($_POST['ooe']) ? $_POST['ooe'] : '';
-$sbg = isset($_POST['sbg']) ? $_POST['sbg'] : '';
-$stmk = isset($_POST['stmk']) ? $_POST['stmk'] : '';
-$vlbg = isset($_POST['vlbg']) ? $_POST['vlbg'] : '';
-$w = isset($_POST['w']) ? $_POST['w'] : '';
+$db = new db($dbLang, $dbName);
+
+$email = isset($_POST['email']) ? $db->escape_string($_POST['email']) : '';
+$bund = isset($_POST['bund']) ? $db->escape_string($_POST['bund']) : '';
+$bgld = isset($_POST['bgld']) ? $db->escape_string($_POST['bgld']) : '';
+$ktn = isset($_POST['ktn']) ? $db->escape_string($_POST['ktn']) : '';
+$noe = isset($_POST['noe']) ? $db->escape_string($_POST['noe']) : '';
+$ooe = isset($_POST['ooe']) ? $db->escape_string($_POST['ooe']) : '';
+$sbg = isset($_POST['sbg']) ? $db->escape_string($_POST['sbg']) : '';
+$stmk = isset($_POST['stmk']) ? $db->escape_string($_POST['stmk']) : '';
+$vlbg = isset($_POST['vlbg']) ? $db->escape_string($_POST['vlbg']) : '';
+$w = isset($_POST['w']) ? $db->escape_string($_POST['w']) : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 
 if (isset($_GET['dse']))
@@ -40,7 +42,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
   goto end;
 }
 
-$db = new db($dbLang, $dbName);
+
 
 $prefs = 1;
 //if($bund == "bund") {$prefs += 1;}
