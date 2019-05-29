@@ -71,7 +71,7 @@ function change_link($sid,$page = 'change')
   global $baseUrl,$key;
   $date = new DateTime();
   $rand = mt_rand();
-  return $baseUrl.$page.".php?s=" . $rand . "&q=" . base64_url_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key . $rand, $sid . '|' . $date->getTimestamp(), MCRYPT_MODE_CBC));
+  return $baseUrl.$page.".php?s=" . $rand . "&q=" . base64_url_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key , $sid . '|' . $date->getTimestamp(), MCRYPT_MODE_CBC));
 }
 
 ?>
