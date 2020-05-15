@@ -21,7 +21,7 @@ $stmk = isset($_POST['stmk']) ? $db->escape($_POST['stmk']) : '';
 $vlbg = isset($_POST['vlbg']) ? $db->escape($_POST['vlbg']) : '';
 $w = isset($_POST['w']) ? $db->escape($_POST['w']) : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
-$submit = isset($_POST['website']) ? $_POST['website'] : '';
+$website = isset($_POST['website']) ? $_POST['website'] : '';
 
 if (isset($_GET['dse']))
 {
