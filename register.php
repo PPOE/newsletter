@@ -101,7 +101,7 @@ end:
     footer {
         color: white;
     }
-    form #website {
+    form #website_section {
         display: none;
     }
 <?php echo $display;?>
