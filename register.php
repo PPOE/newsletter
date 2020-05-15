@@ -21,6 +21,7 @@ $stmk = isset($_POST['stmk']) ? $db->escape($_POST['stmk']) : '';
 $vlbg = isset($_POST['vlbg']) ? $db->escape($_POST['vlbg']) : '';
 $w = isset($_POST['w']) ? $db->escape($_POST['w']) : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
+$submit = isset($_POST['website']) ? $_POST['website'] : '';
 
 if (isset($_GET['dse']))
 {
@@ -28,7 +29,8 @@ if (isset($_GET['dse']))
   goto end;
 }
 
-if($submit != "true"){
+// honeypots
+if($submit != "true" || !empty($website)) {
   goto end;
 }
 
@@ -92,12 +94,15 @@ end:
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
     body {
-    background-color: #4c2582;
+        background-color: #4c2582;
         padding-top: 60px;
         padding-bottom: 40px;
-        }
+    }
     footer {
-    color: white;
+        color: white;
+    }
+    form #website {
+        display: none;
     }
 <?php echo $display;?>
     </style>
@@ -158,7 +163,11 @@ if($error != "") {
           <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg">Vorarlberg</label>
           <label class="checkbox"><input type="checkbox" name="w" value="w">Wien</label>
         </div>
-              <input type="hidden" name="submit" value="true" />
+          <input type="hidden" name="submit" value="true" />
+          <div id="website_section">
+            <label for="website">Folgendes Feld bitte nicht ausfüllen.</label>
+            <input type="text" id="website" name="website" />
+          </div>
 	      <button type="submit" class="btn">Absenden</button>
 	    </form>
 			<p><a href="https://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
