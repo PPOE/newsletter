@@ -57,7 +57,7 @@ if($stmk == "stmk") {$prefs += 64;}
 if($vlbg == "vlbg") {$prefs += 128;}
 if($w == "w") {$prefs += 256;}
 
-$id = $db->query("SELECT id FROM users WHERE email = '$email' LIMIT 1");
+$id = $db->query("SELECT id FROM users WHERE email = $email LIMIT 1");
 if (count($id) > 0)
 {
   $error = "Diese E-Mail-Adresse ist bereits für den Newsletter-Empfang eingetragen!";
@@ -70,10 +70,10 @@ $sid = mt_rand();
 } while (count($db->query("SELECT * FROM users WHERE sid = $sid")) > 0);
 
 
-$db->query("INSERT INTO users (email, prefs, sid) VALUES ('$email', $prefs, $sid);");
+$db->query("INSERT INTO users (email, prefs, sid) VALUES ($email, $prefs, $sid);");
 
-$checkmail_text = "Jemand (hoffentlich du selbst) möchte deine Mailadresse \"".$email."\" für den Piraten-Newsletter anmelden. \nWenn du damit einverstanden bist, klicke bitte auf den folgenden Link:\n".change_link($sid,"confirm"). "\n\nWenn du diesen Newsletter nicht empfangen willst, brauchst du nichts zu unternehmen. Nur wenn du den obigen Bestätigungslink anklickst, wirst du den Newsletter bekommen.";
-mail_utf8($db,$email, "[Piraten-Newsletter] Bestätigung deiner E-Mail-Adresse", $checkmail_text, from_header(1));
+$checkmail_text = "Jemand (hoffentlich du selbst) möchte deine Mailadresse ".$email." für den Piraten-Newsletter anmelden. \nWenn du damit einverstanden bist, klicke bitte auf den folgenden Link:\n".change_link($sid,"confirm"). "\n\nWenn du diesen Newsletter nicht empfangen willst, brauchst du nichts zu unternehmen. Nur wenn du den obigen Bestätigungslink anklickst, wirst du den Newsletter bekommen.";
+mail_utf8($db,str_replace("'", "", $email), "[Piraten-Newsletter] Bestätigung deiner E-Mail-Adresse", $checkmail_text, from_header(1));
 
 $db->close();
 
