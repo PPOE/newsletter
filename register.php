@@ -39,7 +39,7 @@ if($email == "") {
   goto end;
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
   $error = "Diese E-Mail-Adresse ist ungültig!";
   goto end;
 }
