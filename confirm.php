@@ -176,7 +176,7 @@ $db = new db($dbLang, $dbName);
 $confirmed = $db->query("SELECT confirmed FROM users WHERE sid = '$sid' LIMIT 1");
 if ($confirmed[0]['confirmed'] != 0 && $confirmed[0]['confirmed'] != 'f')
 {
-    $error = "Diese E-Mail-Adresse wurde bereits bestÃ¤tigt!";
+    $error = "Diese E-Mail-Adresse wurde bereits bestätigt!";
   goto end;
 }
 
@@ -200,8 +200,8 @@ end:
     <meta charset="utf-8">
     <title>Piraten-Newsletter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier kÃ¶nnen sich Interessenten und Mitglieder fÃ¼r den Newsletter der Piratenpartei Ã–sterreichs anmelden.">
-    <meta name="author" content="Piratenpartei Ã–sterreichs">
+    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
+    <meta name="author" content="Piratenpartei Österreichs">
 
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
