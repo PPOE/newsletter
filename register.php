@@ -48,14 +48,14 @@ if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 
 $prefs = 1;
 //if($bund == "bund") {$prefs += 1;}
-if($bgld == "bgld") {$prefs += 2;}
-if($ktn == "ktn") {$prefs += 4;}
-if($noe == "noe") {$prefs += 8;}
-if($ooe == "ooe") {$prefs += 16;}
-if($sbg == "sbg") {$prefs += 32;}
-if($stmk == "stmk") {$prefs += 64;}
-if($vlbg == "vlbg") {$prefs += 128;}
-if($w == "w") {$prefs += 256;}
+if($bgld == "'bgld'") {$prefs += 2;}
+if($ktn == "'ktn'") {$prefs += 4;}
+if($noe == "'noe'") {$prefs += 8;}
+if($ooe == "'ooe'") {$prefs += 16;}
+if($sbg == "'sbg'") {$prefs += 32;}
+if($stmk == "'stmk'") {$prefs += 64;}
+if($vlbg == "'vlbg'") {$prefs += 128;}
+if($w == "'w'") {$prefs += 256;}
 
 $id = $db->query("SELECT id FROM users WHERE email = $email LIMIT 1");
 if (count($id) > 0)
