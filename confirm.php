@@ -176,7 +176,7 @@ $db = new db($dbLang, $dbName);
 $confirmed = $db->query("SELECT confirmed FROM users WHERE sid = '$sid' LIMIT 1");
 if ($confirmed[0]['confirmed'] != 0 && $confirmed[0]['confirmed'] != 'f')
 {
-  $error = "Diese E-Mail-Adresse wurde bereits bestätigt!";
+    $error = "Diese E-Mail-Adresse wurde bereits bestÃ¤tigt!";
   goto end;
 }
 
@@ -185,9 +185,9 @@ $db->query("UPDATE users SET confirmed=TRUE WHERE sid = '$sid';");
 $email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1");
 $email = $email[0]['email'];
 
-$checkmail_text = "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Ab sofort erhältst du regelmäßig deinen personalisierten Newsletter!\n\n";
-$checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters ansehen und verändern oder den Newsletter abbestellen:\n".change_link($sid);
-mail_utf8($db,$confirm, $email, "[Piraten-Newsletter] E-Mail-Adresse bestätigt", $checkmail_text, from_header(1));
+$checkmail_text = "Deine E-Mail-Adresse wurde erfolgreich bestÃ¤tigt. Ab sofort erhÃ¤ltst du regelmÃ¤ÃŸig deinen personalisierten Newsletter!\n\n";
+$checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters ansehen und verÃ¤ndern oder den Newsletter abbestellen:\n".change_link($sid);
+mail_utf8($db,$confirm, $email, "[Piraten-Newsletter] E-Mail-Adresse bestÃ¤tigt", $checkmail_text, from_header(1));
 
 $db->close();
 $display = "#error_view {display:none;}";
@@ -200,8 +200,8 @@ end:
     <meta charset="utf-8">
     <title>Piraten-Newsletter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Hier können sich Interessenten und Mitglieder für den Newsletter der Piratenpartei Österreichs anmelden.">
-    <meta name="author" content="Piratenpartei Österreichs">
+    <meta name="description" content="Hier kÃ¶nnen sich Interessenten und Mitglieder fÃ¼r den Newsletter der Piratenpartei Ã–sterreichs anmelden.">
+    <meta name="author" content="Piratenpartei Ã–sterreichs">
 
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -233,9 +233,9 @@ end:
         <div class="span8">
 	  <div id="confirm_view" class="well">
 	    <h1>Du bist erfolgreich angemeldet!</h1>
-	    <p>Ab sofort erhältst du regelmäßig unseren personalisierten Newsletter. Viel Spa&szlig;!</p>
-	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verändern oder den Newsletter abbestellen:<br><a href="<?php echo change_link($sid);?>"><?php echo change_link($sid);?></a>
-	    <p><a href="https://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
+	    <p>Ab sofort erhÃ¤ltst du regelmÃ¤ÃŸig unseren personalisierten Newsletter. Viel Spa&szlig;!</p>
+	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verÃ¤ndern oder den Newsletter abbestellen:<br><a href="<?php echo change_link($sid);?>"><?php echo change_link($sid);?></a>
+	    <p><a href="https://www.piratenpartei.at">ZurÃ¼ck zu piratenpartei.at</a></p>
 	  </div>
 	  <div id="error_view" class="well">
 	    <h1>Ein Fehler ist aufgetreten!</h1>

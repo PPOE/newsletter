@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 if (php_sapi_name() != 'cli') { exit('error'); }
 global $mailqueue;
 $mailqueue = true;
@@ -52,6 +51,9 @@ for ($i = 0; $i < 1; $i++)
             mail($to,$subject,$body,$headers,$params);
         }
 }
+
 $db->close();
 if ($work == 1)
     echo "OK\n";
+    
+

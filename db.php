@@ -21,6 +21,7 @@ if($gDb->num_rows($result_role) > 0)
 {
   $agnewsletter = true;
 }
+
 if (!isset($mailqueue) || !$mailqueue)
 {
 // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
@@ -59,7 +60,9 @@ else
 {
   $access = array(2);
 }
+
 //Verwaltung der Session
+
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 }
