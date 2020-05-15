@@ -164,7 +164,7 @@ if(isset($_GET['s']) && preg_match('/^-?\d+$/', $_GET['s']) == 1 && isset($_GET[
   goto end;
 }
 $q_array = explode("|", mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, base64_url_decode($q), MCRYPT_MODE_CBC));
-if (count($q_array) <= 1 || preg_match('/^-?\d+$/', $q_array[0]) != 1) { 
+if (count($q_array) <= 1 || preg_match('/^-?\d+$/', $q_array[0]) != 1) {
   $error = "Ungültige Abfrge 2!";
   goto end;
 }
@@ -185,9 +185,9 @@ $db->query("UPDATE users SET confirmed=TRUE WHERE sid = '$sid';");
 $email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1");
 $email = $email[0]['email'];
 
-$checkmail_text = "Deine E-Mail-Adresse wurde erfolgreich bestÃ¤tigt. Ab sofort erhÃ¤ltst du regelmÃ¤ÃŸig deinen personalisierten Newsletter!\n\n";
-$checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters ansehen und verÃ¤ndern oder den Newsletter abbestellen:\n".change_link($sid);
-mail_utf8($db,$confirm, $email, "[Piraten-Newsletter] E-Mail-Adresse bestÃ¤tigt", $checkmail_text, from_header(1));
+$checkmail_text = "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Ab sofort erhältst du regelmäßig deinen personalisierten Newsletter!\n\n";
+$checkmail_text .= "Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters ansehen und verändern oder den Newsletter abbestellen:\n".change_link($sid);
+mail_utf8($db,$confirm, $email, "[Piraten-Newsletter] E-Mail-Adresse bestätigt", $checkmail_text, from_header(1));
 
 $db->close();
 $display = "#error_view {display:none;}";
@@ -233,9 +233,9 @@ end:
         <div class="span8">
 	  <div id="confirm_view" class="well">
 	    <h1>Du bist erfolgreich angemeldet!</h1>
-	    <p>Ab sofort erhÃ¤ltst du regelmÃ¤ÃŸig unseren personalisierten Newsletter. Viel Spa&szlig;!</p>
-	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verÃ¤ndern oder den Newsletter abbestellen:<br><a href="<?php echo change_link($sid);?>"><?php echo change_link($sid);?></a>
-	    <p><a href="https://www.piratenpartei.at">ZurÃ¼ck zu piratenpartei.at</a></p>
+	    <p>Ab sofort erhältst du regelmäßig unseren personalisierten Newsletter. Viel Spaß!</p>
+	    <p>Mit einem Klick auf den folgenden Link kannst du die Inhaltseinstellungen deines Newsletters verändern oder den Newsletter abbestellen:<br><a href="<?php echo change_link($sid);?>"><?php echo change_link($sid);?></a>
+	    <p><a href="https://www.piratenpartei.at">Zurück zu piratenpartei.at</a></p>
 	  </div>
 	  <div id="error_view" class="well">
 	    <h1>Ein Fehler ist aufgetreten!</h1>
