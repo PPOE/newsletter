@@ -125,7 +125,7 @@ end:
           <div id="dse_view" class="well">
             <h1>Datenschutzrichtlinien</h1>
             <p>
-Nach Anmeldung wird die E-Mail-Adresse des Beziehers von der Piratenpartei &Ouml;sterreichs als Auftraggeber verarbeitet (gespeichert und f&uuml;r Zwecke der Versendung ben&uuml;tzt). Es werden keinerlei Daten zum &Uuml;bermittlungsvorgang (Zustell- oder Lesebest&auml;tigungen) ermittelt. Nach Abmeldung vom Bezug werden die Daten aus dieser Datenanwendung gel&ouml;scht. Eine &Uuml;bermittlung dieser Daten ist nicht vorgesehen. Die Datenanwendung f&uuml;r Zwecke dieses Newsletters (einschlie&szlig;lich der zur Verbreitung ben&uuml;tzten Mailserver) wird auf EDV-Anlagen der Piratenpartei &Ouml;sterreichs gehostet.
+Nach Anmeldung wird die E-Mail-Adresse des Beziehers von der Piratenpartei Österreichs als Auftraggeber verarbeitet (gespeichert und für Zwecke der Versendung benützt). Es werden keinerlei Daten zum Übermittlungsvorgang (Zustell- oder Lesebestätigungen) ermittelt. Nach Abmeldung vom Bezug werden die Daten aus dieser Datenanwendung gelöscht. Eine Übermittlung dieser Daten ist nicht vorgesehen. Die Datenanwendung für Zwecke dieses Newsletters (einschließlich der zur Verbreitung benützten Mailserver) wird auf EDV-Anlagen der Piratenpartei Österreichs gehostet.
             </p>
             <p>
               <a href="register.php">Zur&uuml;ck</a>
