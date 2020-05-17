@@ -11,6 +11,7 @@ $sbg = isset($_POST['sbg']) ? $_POST['sbg'] : '';
 $stmk = isset($_POST['stmk']) ? $_POST['stmk'] : '';
 $vlbg = isset($_POST['vlbg']) ? $_POST['vlbg'] : '';
 $w = isset($_POST['w']) ? $_POST['w'] : '';
+$tir = isset($_POST['tir']) ? $_POST['tir'] : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $s_get = isset($_GET['s']) ? $_GET['s'] : '';
 $q_get = isset($_GET['q']) ? $_GET['q'] : '';
@@ -58,7 +59,7 @@ if($sbg == "sbg") {$prefs += 32;}
 if($stmk == "stmk") {$prefs += 64;}
 if($vlbg == "vlbg") {$prefs += 128;}
 if($w == "w") {$prefs += 256;}
-if($w == "tir") {$prefs += 512;}
+if($tir == "tir") {$prefs += 512;}
 
 $id = $db->query("SELECT id FROM users WHERE sid = '$sid' LIMIT 1;");
 $email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1;");

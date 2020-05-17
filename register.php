@@ -20,6 +20,7 @@ $sbg = isset($_POST['sbg']) ? $db->escape($_POST['sbg']) : '';
 $stmk = isset($_POST['stmk']) ? $db->escape($_POST['stmk']) : '';
 $vlbg = isset($_POST['vlbg']) ? $db->escape($_POST['vlbg']) : '';
 $w = isset($_POST['w']) ? $db->escape($_POST['w']) : '';
+$tir = isset($_POST['tir']) ? $db->escape($_POST['tir']) : '';
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 $website = isset($_POST['website']) ? $_POST['website'] : '';
 
@@ -56,7 +57,7 @@ if($sbg == "'sbg'") {$prefs += 32;}
 if($stmk == "'stmk'") {$prefs += 64;}
 if($vlbg == "'vlbg'") {$prefs += 128;}
 if($w == "'w'") {$prefs += 256;}
-if($w == "'tir'") {$prefs += 512;}
+if($tir == "'tir'") {$prefs += 512;}
 
 $id = $db->query("SELECT id FROM users WHERE email = $email LIMIT 1");
 if (count($id) > 0)
