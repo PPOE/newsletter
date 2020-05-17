@@ -73,11 +73,11 @@ $db->close();
         <h1>Teilnehmer-Liste</h1>
         <p>
               <table class="table">
-                <tr><td>Adresse</td><td>Präferenzen</td><td>Bestätigt</td><td>Optionen</td></tr>
+                <tr><td>Adresse</td><td>Präferenzen</td><td>Bestätigt</td><td>Anmeldung</td><td>Optionen</td></tr>
 <?php
 foreach ($users as $user)
 {
-  echo '<tr><td><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></td><td>' . implode(', ', decodePrefs($user['prefs'])) . '</td><td>' . ($user['confirmed'] != 'f' && $user['confirmed'] != 0 ? 'Ja' : 'Nein') . '</td><td><form action="list.php" method="POST"><input type="hidden" name="email" value="' . $user['email'] . '" /><input type="submit" name="delete" value="Abmelden" class="btn btn-danger"/></form></td></tr>';
+  echo '<tr><td><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></td><td>' . implode(', ', decodePrefs($user['prefs'])) . '</td><td>' . ($user['confirmed'] != 'f' && $user['confirmed'] != 0 ? 'Ja' : 'Nein') . '</td><td>' . date('d.m.Y',strtotime($user['creation'])); . '</td><td><form action="list.php" method="POST"><input type="hidden" name="email" value="' . $user['email'] . '" /><input type="submit" name="delete" value="Abmelden" class="btn btn-danger"/></form></td></tr>';
 }
 ?>
               </table>
