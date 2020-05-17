@@ -87,6 +87,8 @@ if (in_array(45,$access))
   return 128;
 if (in_array(37,$access))
   return 256;
+if (in_array(44,$access))
+    return 512;
 return 0;
 }
 
