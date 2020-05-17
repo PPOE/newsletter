@@ -21,6 +21,8 @@ function from_header($n)
                         return "From: Piratenpartei Newsletter <lv-vorarlberg@piratenpartei.at>\r\n";
                 case 256:
                         return "From: Piratenpartei Newsletter <lv-wien@piratenpartei.at>\r\n";
+                case 512:
+                        return "From: Piratenpartei Newsletter <lv-tirol@piratenpartei.at>\r\n";
                 default:
                         return "From: Piratenpartei Newsletter <newsletter@piratenpartei.at>\r\n";
         }

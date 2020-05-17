@@ -186,6 +186,8 @@ function decodePrefs($prefs)
     $pa[] = "Oberösterreich";
   if ($prefs & 32)
     $pa[] = "Salzburg";
+  if ($prefs & 512)
+    $pa[] = "Tirol";
   if ($prefs & 64)
     $pa[] = "Steiermark";
   if ($prefs & 128)

@@ -56,6 +56,7 @@ if($sbg == "'sbg'") {$prefs += 32;}
 if($stmk == "'stmk'") {$prefs += 64;}
 if($vlbg == "'vlbg'") {$prefs += 128;}
 if($w == "'w'") {$prefs += 256;}
+if($w == "'tir'") {$prefs += 512;}
 
 $id = $db->query("SELECT id FROM users WHERE email = $email LIMIT 1");
 if (count($id) > 0)
@@ -160,6 +161,7 @@ if($error != "") {
           <label class="checkbox"><input type="checkbox" name="ooe" value="ooe">Oberösterreich</label>
           <label class="checkbox"><input type="checkbox" name="sbg" value="sbg">Salzburg</label>
           <label class="checkbox"><input type="checkbox" name="stmk" value="stmk">Steiermark</label>
+          <label class="checkbox"><input type="checkbox" name="tir" value="tir">Tirol</label>
           <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg">Vorarlberg</label>
           <label class="checkbox"><input type="checkbox" name="w" value="w">Wien</label>
         </div>

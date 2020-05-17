@@ -58,6 +58,7 @@ if($sbg == "sbg") {$prefs += 32;}
 if($stmk == "stmk") {$prefs += 64;}
 if($vlbg == "vlbg") {$prefs += 128;}
 if($w == "w") {$prefs += 256;}
+if($w == "tir") {$prefs += 512;}
 
 $id = $db->query("SELECT id FROM users WHERE sid = '$sid' LIMIT 1;");
 $email = $db->query("SELECT email FROM users WHERE sid = '$sid' LIMIT 1;");
@@ -131,7 +132,7 @@ $db->close();
         <div class="span8">
           <div id="delete_view" class="well">
             <h1>Abmeldung erfolgreich!</h1>
-        <p>Ab sofort wurde der Versand von Newslettern an dich gestoppt und deine Daten unwiderbringlich gelöscht!</p> 
+        <p>Ab sofort wurde der Versand von Newslettern an dich gestoppt und deine Daten unwiderbringlich gelöscht!</p>
           </div>
       <div id="confirm_view" class="well">
         <h1>Deine Einstellungen wurden erfolgreich geändert!</h1>
@@ -156,6 +157,7 @@ echo '                  <label class="checkbox"><input type="checkbox" name="noe
 echo '                  <label class="checkbox"><input type="checkbox" name="ooe" value="ooe" '.($prefs & 16 ? 'checked="checked"' : '').'>Oberösterreich</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="sbg" value="sbg" '.($prefs & 32 ? 'checked="checked"' : '').'>Salzburg</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="stmk" value="stmk" '.($prefs & 64 ? 'checked="checked"' : '').'>Steiermark</label>';
+echo '                  <label class="checkbox"><input type="checkbox" name="tir" value="tir" '.($prefs & 512 ? 'checked="checked"' : '').'>Tirol</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="vlbg" value="vlbg" '.($prefs & 128 ? 'checked="checked"' : '').'>Vorarlberg</label>';
 echo '                  <label class="checkbox"><input type="checkbox" name="w" value="w" '.($prefs & 256 ? 'checked="checked"' : '').'>Wien</label>';
 ?>
